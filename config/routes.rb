@@ -1,4 +1,6 @@
 Urlsplease::Application.routes.draw do |map|
+  devise_for :users
+
   get "welcome/index"
 
   # The priority is based upon order of creation:

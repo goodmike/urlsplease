@@ -38,5 +38,8 @@ module Urlsplease
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters << :password
+    
+    # Secret token for hashing
+    config.secret_token = "p7reda3huf3ahuf8uW46ru7Ah5dewEdr"
   end
 end
