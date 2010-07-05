@@ -3,6 +3,10 @@ source 'http://gemcutter.org'
 
 
 gem "rails", "3.0.0.beta4"
+gem "warden", "0.10.7"
+gem "bcrypt-ruby", "2.1.2", :require => "bcrypt" 
+gem "devise", "1.1.rc2"
+gem "pg"
 
 ## Bundle edge rails:
 # gem "rails", :git => "git://github.com/rails/rails.git"
