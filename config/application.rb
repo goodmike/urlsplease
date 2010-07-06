@@ -41,5 +41,9 @@ module Urlsplease
     
     # Secret token for hashing
     config.secret_token = "p7reda3huf3ahuf8uW46ru7Ah5dewEdr"
+    
+    config.session_store :cookie_store, :key    => '_pleaseblog_session',
+  :secret => '785eb39861beefa0af988c961323952a0612b5fdf7b9'
+
   end
 end

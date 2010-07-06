@@ -1,4 +1,8 @@
 Urlsplease::Application.routes.draw do |map|
+  resources :resources
+
+  resources :requests
+
   devise_for :users
 
   get "welcome/index"
