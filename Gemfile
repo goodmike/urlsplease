@@ -8,6 +8,14 @@ gem "bcrypt-ruby", "2.1.2", :require => "bcrypt"
 gem "devise", "1.1.rc2"
 gem "pg"
 
+group :test do
+    gem "rspec-rails", ">= 2.0.0.beta.15"
+    gem "rspec",       ">= 2.0.0.beta.15"
+    gem "rspec-core",  ">= 2.0.0.beta.15"
+    gem "rspec-expectations", ">= 2.0.0.beta.15"
+    gem "rspec-mocks", ">= 2.0.0.beta.15"
+end
+
 ## Bundle edge rails:
 # gem "rails", :git => "git://github.com/rails/rails.git"
 

@@ -1,17 +1,26 @@
 <html>
 <head>
 <title>URLs Please</title>
+  <link rel="stylesheet" href="/stylesheets/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
   <%= yield :head %>
 </head>
 <body>
+<div id="body_head">
+  <div id="main_nav" style="float:right">
+    <%= link_to "Make a request", new_request_path %> | 
+    <%= link_to "Review requests", requests_path %>
+  </div>
+  <h1>URLs Please</h1>
+
   <div id="user_nav">
-<% if user_signed_in? %>
-  Signed in as <%= current_user.nickname %>. 
-  <%= link_to "Sign out", destroy_user_session_path %>
-<% else %>
-  <%= link_to "Sign in", new_user_session_path %> or 
-  <%= link_to "Sign up", new_user_registration_path %>
-<% end %>  
+  <% if user_signed_in? %>
+    Signed in as <%= current_user.nickname %>. 
+    <%= link_to "Sign out", destroy_user_session_path -%>
+  <% else %>
+    <%= link_to "Sign in", new_user_session_path -%> or 
+    <%= link_to "Sign up", new_user_registration_path -%>
+  <% end %>  
+  </div>
 </div>
 
 <p class="notice"><%= notice %></p>

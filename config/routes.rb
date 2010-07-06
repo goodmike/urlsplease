@@ -1,4 +1,6 @@
 Urlsplease::Application.routes.draw do |map|
+  resources :tags
+
   resources :resources
 
   resources :requests
