@@ -40,7 +40,7 @@ module Urlsplease
     config.filter_parameters << :password
     
     # Secret token for hashing
-    config.secret_token = "p7reda3huf3ahuf8uW46ru7Ah5dewEdr"
+    config.secret_token = "374eda340f3a42f8ub46427af5de0ed4"
     
     config.session_store :cookie_store, :key    => '_pleaseblog_session',
   :secret => '785eb39861beefa0af988c961323952a0612b5fdf7b9'
