@@ -1,4 +1,10 @@
-<div id="user_nav">
+<html>
+<head>
+<title>URLs Please</title>
+  <%= yield :head %>
+</head>
+<body>
+  <div id="user_nav">
 <% if user_signed_in? %>
   Signed in as <%= current_user.nickname %>. 
   <%= link_to "Sign out", destroy_user_session_path %>
@@ -10,4 +16,8 @@
 
 <p class="notice"><%= notice %></p>
 <p class="alert"><%= alert %></p>
+
 <%= yield %>
+
+</body>
+</html>

@@ -1,2 +1,18 @@
-<h1>Welcome#index</h1>
-<p>Find me in app/views/welcome/index.html.erb</p>
+<h1>Welcome to URLs Please</h1>
+
+<h2>Sign up</h2>
+<p>It's very simple: just <%= link_to "gimme a nickname and valid email address", new_user_registration_path %> I won't share or use to send you spam. That's it for the personal information. No market segmentation necessary: we're all friends here.</p>
+
+<h2>Post a request</h2>
+<p>Wish someone had written a good blog post or made a screencast or podcast about a topic dear to your heart? <%= link_to "Just ask for it", new_request_path %>. This is your opportunity to ask the world to make it so.</p> 
+
+<h2>Or, prepare and submit a response</h2>
+<p>Are you a blogger or other content creator? Do you fancy yourself an expert on some topic? Looking for something to write or record about? <%= link_to "Find ideas here", requests_path %> and make something you know someone wants. Then post the URL. You own your content and share the link.</p>
+
+<h2>Is this it?</h2>
+<p>I know this is not a sophisticated web page. How do I plan to monetize this? What's my plan for the spam bots that will arrive any moment? Why don't I even have a 1995-era FAQ?<p>
+  
+<p>I'm working on all of this, possibly even as you're reading this. I have a <%= link_to "to-do list", welcome_todo_path %>, but the important thing is to launch and find some (free) customers to help me find out what URLs Please ought to be. This is a personal project. I'm not trying to get rich from it. I may add some unobtrusive ads down the road if (the hubris!) I need to pay for increased traffic. 
+  
+<h2>Want the whole story?</h2>
+<p>I'm good at writing in the long form, so you should read my <%= link_to "statement of purpose", welcome_purpose_path %> if you're interested in the details of my crackpot idea.</p>
