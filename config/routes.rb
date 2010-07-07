@@ -5,7 +5,11 @@ Urlsplease::Application.routes.draw do |map|
 
   resources :requests
 
-  devise_for :users
+  devise_for :users, :path => 'accounts'
+
+  resources :users do
+    resources :requests
+  end
 
   get "welcome/index"
   get "welcome/purpose"

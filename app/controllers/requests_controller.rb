@@ -2,8 +2,12 @@ class RequestsController < ApplicationController
   # GET /requests
   # GET /requests.xml
   def index
-    @requests = Request.all
-
+    if params[:user_id]
+      @user = User.find(params[:user_id])
+      @requests = @user.requests
+    else
+      @requests = Request.all
+    end
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @requests }
@@ -13,7 +17,10 @@ class RequestsController < ApplicationController
   # GET /requests/1
   # GET /requests/1.xml
   def show
-    @request = Request.find(params[:id])
+    return render_404 unless params[:user_id]
+    @user = User.find(params[:user_id])
+    return render_404 unless current_user == @user
+    @request = @user.requests.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -79,5 +86,12 @@ class RequestsController < ApplicationController
       format.html { redirect_to(requests_url) }
       format.xml  { head :ok }
     end
+  end
+  
+  private 
+  
+  def render_404
+    render(:file => "#{Rails.root}/public/404.html", :layout => false, :status => 404)
+    return false
   end
 end

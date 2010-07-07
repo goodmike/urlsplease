@@ -6,21 +6,20 @@
 </head>
 <body>
 <div id="body_head">
-  <div id="main_nav" style="float:right">
-    <%= link_to "Make a request", new_request_path %> | 
-    <%= link_to "Review requests", requests_path %>
-  </div>
-  <h1>URLs Please</h1>
-
-  <div id="user_nav">
-  <% if user_signed_in? %>
+  <div id="main_nav" style="float:right">    
+  <% if user_signed_in? -%>
     Signed in as <%= current_user.nickname %>. 
-    <%= link_to "Sign out", destroy_user_session_path -%>
+    <%= link_to "Sign out", destroy_user_session_path -%> |
+    <%= link_to "Make a request", new_user_request_path(current_user) %> | 
+    <%= link_to "Review requests", requests_path %>
   <% else %>
     <%= link_to "Sign in", new_user_session_path -%> or 
     <%= link_to "Sign up", new_user_registration_path -%>
-  <% end %>  
+  <% end %> 
   </div>
+
+  <h1>URLs Please</h1>
+
 </div>
 
 <p class="notice"><%= notice %></p>
