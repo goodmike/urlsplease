@@ -43,13 +43,19 @@ class RequestsController < ApplicationController
 
   # GET /requests/1/edit
   def edit
-    @request = Request.find(params[:id])
+    return render_404 unless params[:user_id]
+    @user = User.find(params[:user_id])
+    return render_404 unless current_user == @user
+    @request = @user.requests.find(params[:id])
   end
 
   # POST /requests
   # POST /requests.xml
   def create
-    @request = Request.new(params[:request])
+    return render_404 unless params[:user_id]
+    @user = User.find(params[:user_id])
+    return render_404 unless current_user == @user
+    @request = @user.requests.build(params[:request])
 
     respond_to do |format|
       if @request.save
