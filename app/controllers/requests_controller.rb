@@ -19,7 +19,6 @@ class RequestsController < ApplicationController
   def show
     return render_404 unless params[:user_id]
     @user = User.find(params[:user_id])
-    return render_404 unless current_user == @user
     @request = @user.requests.find(params[:id])
 
     respond_to do |format|
@@ -31,7 +30,10 @@ class RequestsController < ApplicationController
   # GET /requests/new
   # GET /requests/new.xml
   def new
-    @request = Request.new
+    return render_404 unless params[:user_id]
+    @user = User.find(params[:user_id])
+    return render_404 unless current_user == @user
+    @request = @user.requests.build()
 
     respond_to do |format|
       format.html # new.html.erb

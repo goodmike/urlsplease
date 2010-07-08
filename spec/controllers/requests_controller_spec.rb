@@ -55,15 +55,15 @@ describe RequestsController do
         get :show, :user_id => "1", :id => "2"
       end
       
-      it "determines whether current_user may access user's resources" do
-        controller.should_receive(:current_user) { mock_user }
+      it "looks up request from user's requests" do
+        @requests.should_receive(:find).with("2") { [mock_request] }
         get :show, :user_id => "1", :id => "2"
       end
       
-      it "returns a 404 error when current_user may not access user's resources" do
+      it "allows a user to view another user's request" do
         controller.stub(:current_user) { mock_model(User) }
         get :show, :user_id => "1", :id => "2"
-        response.code.should ==("404")
+        response.should be_success
       end
     end
     
@@ -76,48 +76,89 @@ describe RequestsController do
     end
   end
 
-#   describe "GET new" do
-#     it "assigns a new tag as @tag" do
-#       Tag.stub(:new) { mock_tag }
-#       get :new
-#       assigns(:tag).should be(mock_tag)
-#     end
-#   end
+  describe "GET new" do
+    
+    describe "when authorizing user is present" do
+      
+      before(:each) do
+        User.stub(:find).with("1") { mock_user }
+        controller.stub(:current_user) { mock_user }
+        @requests = []
+        @requests.stub!(:build) { mock_request }
+        mock_user.stub(:requests) { @requests }
+      end
+            
+      it "looks up user" do
+        User.should_receive(:find).with("1").and_return(mock_user)
+        get :new, :user_id => "1"
+      end
+      
+      it "determines whether current_user may access user's resources" do
+        controller.should_receive(:current_user) { mock_user }
+        get :new, :user_id => "1"
+      end
+      
+      it "builds a new request from the user's requests collection" do
+        mock_user.should_receive(:requests) { @requests }
+        @requests.should_receive(:build) { mock_request }
+        get :new, :user_id => "1"
+      end
+      
+      it "assigns a new request as @request" do
+        get :new, :user_id => "1"
+        assigns(:request).should be(mock_request)
+      end
+      
+      it "returns a 404 error when current_user may not access user's resources" do
+        controller.stub(:current_user) { mock_model(User) }
+        get :new, :user_id => "1"
+        response.code.should ==("404")
+      end
+    end
+    
+    describe "when no authorizing user is present" do
+      
+      it "returns a 404 error" do
+        get :new
+        response.code.should ==("404")
+      end
+    end
+  end
 # 
 #   describe "GET edit" do
-#     it "assigns the requested tag as @tag" do
-#       Tag.stub(:find).with("37") { mock_tag }
+#     it "assigns the requested request as @request" do
+#       Request.stub(:find).with("37") { mock_request }
 #       get :edit, :id => "37"
-#       assigns(:tag).should be(mock_tag)
+#       assigns(:request).should be(mock_request)
 #     end
 #   end
 # 
 #   describe "POST create" do
 # 
 #     describe "with valid params" do
-#       it "assigns a newly created tag as @tag" do
-#         Tag.stub(:new).with({'these' => 'params'}) { mock_tag(:save => true) }
-#         post :create, :tag => {'these' => 'params'}
-#         assigns(:tag).should be(mock_tag)
+#       it "assigns a newly created request as @request" do
+#         Request.stub(:new).with({'these' => 'params'}) { mock_request(:save => true) }
+#         post :create, :request => {'these' => 'params'}
+#         assigns(:request).should be(mock_request)
 #       end
 # 
-#       it "redirects to the created tag" do
-#         Tag.stub(:new) { mock_tag(:save => true) }
-#         post :create, :tag => {}
-#         response.should redirect_to(tag_url(mock_tag))
+#       it "redirects to the created request" do
+#         Request.stub(:new) { mock_request(:save => true) }
+#         post :create, :request => {}
+#         response.should redirect_to(request_url(mock_request))
 #       end
 #     end
 # 
 #     describe "with invalid params" do
-#       it "assigns a newly created but unsaved tag as @tag" do
-#         Tag.stub(:new).with({'these' => 'params'}) { mock_tag(:save => false) }
-#         post :create, :tag => {'these' => 'params'}
-#         assigns(:tag).should be(mock_tag)
+#       it "assigns a newly created but unsaved request as @request" do
+#         Request.stub(:new).with({'these' => 'params'}) { mock_request(:save => false) }
+#         post :create, :request => {'these' => 'params'}
+#         assigns(:request).should be(mock_request)
 #       end
 # 
 #       it "re-renders the 'new' template" do
-#         Tag.stub(:new) { mock_tag(:save => false) }
-#         post :create, :tag => {}
+#         Request.stub(:new) { mock_request(:save => false) }
+#         post :create, :request => {}
 #         response.should render_template("new")
 #       end
 #     end
@@ -127,34 +168,34 @@ describe RequestsController do
 #   describe "PUT update" do
 # 
 #     describe "with valid params" do
-#       it "updates the requested tag" do
-#         Tag.should_receive(:find).with("37") { mock_tag }
-#         mock_tag.should_receive(:update_attributes).with({'these' => 'params'})
-#         put :update, :id => "37", :tag => {'these' => 'params'}
+#       it "updates the requested request" do
+#         Request.should_receive(:find).with("37") { mock_request }
+#         mock_request.should_receive(:update_attributes).with({'these' => 'params'})
+#         put :update, :id => "37", :request => {'these' => 'params'}
 #       end
 # 
-#       it "assigns the requested tag as @tag" do
-#         Tag.stub(:find) { mock_tag(:update_attributes => true) }
+#       it "assigns the requested request as @request" do
+#         Request.stub(:find) { mock_request(:update_attributes => true) }
 #         put :update, :id => "1"
-#         assigns(:tag).should be(mock_tag)
+#         assigns(:request).should be(mock_request)
 #       end
 # 
-#       it "redirects to the tag" do
-#         Tag.stub(:find) { mock_tag(:update_attributes => true) }
+#       it "redirects to the request" do
+#         Request.stub(:find) { mock_request(:update_attributes => true) }
 #         put :update, :id => "1"
-#         response.should redirect_to(tag_url(mock_tag))
+#         response.should redirect_to(request_url(mock_request))
 #       end
 #     end
 # 
 #     describe "with invalid params" do
-#       it "assigns the tag as @tag" do
-#         Tag.stub(:find) { mock_tag(:update_attributes => false) }
+#       it "assigns the request as @request" do
+#         Request.stub(:find) { mock_request(:update_attributes => false) }
 #         put :update, :id => "1"
-#         assigns(:tag).should be(mock_tag)
+#         assigns(:request).should be(mock_request)
 #       end
 # 
 #       it "re-renders the 'edit' template" do
-#         Tag.stub(:find) { mock_tag(:update_attributes => false) }
+#         Request.stub(:find) { mock_request(:update_attributes => false) }
 #         put :update, :id => "1"
 #         response.should render_template("edit")
 #       end
@@ -163,16 +204,16 @@ describe RequestsController do
 #   end
 # 
 #   describe "DELETE destroy" do
-#     it "destroys the requested tag" do
-#       Tag.should_receive(:find).with("37") { mock_tag }
-#       mock_tag.should_receive(:destroy)
+#     it "destroys the requested request" do
+#       Request.should_receive(:find).with("37") { mock_request }
+#       mock_request.should_receive(:destroy)
 #       delete :destroy, :id => "37"
 #     end
 # 
-#     it "redirects to the tags list" do
-#       Tag.stub(:find) { mock_tag }
+#     it "redirects to the requests list" do
+#       Request.stub(:find) { mock_request }
 #       delete :destroy, :id => "1"
-#       response.should redirect_to(tags_url)
+#       response.should redirect_to(requests_url)
 #     end
 #   end
 
