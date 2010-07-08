@@ -1,4 +1,11 @@
 class RequestsController < ApplicationController
+  
+  verify :method => :delete, :only => [ :destroy ], 
+       :render => {:text => '405 HTTP DELETE required', :status => 405}, 
+       :add_headers => {'Allow' => 'DELETE'}
+  
+  before_filter :authenticate_user!
+  
   # GET /requests
   # GET /requests.xml
   def index
@@ -71,7 +78,10 @@ class RequestsController < ApplicationController
   # PUT /requests/1
   # PUT /requests/1.xml
   def update
-    @request = Request.find(params[:id])
+    return render_404 unless params[:user_id]
+    @user = User.find(params[:user_id])
+    return render_404 unless current_user == @user
+    @request = @user.requests.find(params[:id])
 
     respond_to do |format|
       if @request.update_attributes(params[:request])
@@ -87,19 +97,17 @@ class RequestsController < ApplicationController
   # DELETE /requests/1
   # DELETE /requests/1.xml
   def destroy
-    @request = Request.find(params[:id])
-    @request.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(requests_url) }
-      format.xml  { head :ok }
-    end
+    return render_404 unless params[:user_id]
+    @user = User.find(params[:user_id])
+    return render_404 unless current_user == @user
+    @request = @user.requests.find(params[:id])
+    render(:status => "501")
   end
   
   private 
   
   def render_404
-    render(:file => "#{Rails.root}/public/404.html", :layout => false, :status => 404)
+    render(:file => "#{Rails.root}/public/404.html", :layout => false, :status => "404")
     return false
   end
 end
