@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <b>Requirements:</b>
   <%= @request.requirements %>
@@ -7,9 +5,7 @@
 
 <p>
   <b>User:</b>
-  <%= @request.user_id %>
+  <%= @request.user.nickname %>
 </p>
 
-
-<%= link_to 'Edit', edit_request_path(@request) %> |
 <%= link_to 'Back', requests_path %>

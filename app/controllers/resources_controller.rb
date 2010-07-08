@@ -2,8 +2,13 @@ class ResourcesController < ApplicationController
   # GET /resources
   # GET /resources.xml
   def index
-    @resources = Resource.all
-
+    if params[:user_id]
+      @user = User.find(params[:user_id])
+      @resources = @user.resources
+    else
+      @resources = Resource.all
+    end
+    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @resources }
@@ -13,7 +18,9 @@ class ResourcesController < ApplicationController
   # GET /resources/1
   # GET /resources/1.xml
   def show
-    @resource = Resource.find(params[:id])
+    return render_404 unless params[:user_id]
+    @user = User.find(params[:user_id])
+    @resource = @user.resources.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

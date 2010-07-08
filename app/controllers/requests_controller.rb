@@ -66,7 +66,7 @@ class RequestsController < ApplicationController
 
     respond_to do |format|
       if @request.save
-        format.html { redirect_to(@request, :notice => 'Request was successfully created.') }
+        format.html { redirect_to(user_request_path(@user,@request), :notice => 'Request was successfully created.') }
         format.xml  { render :xml => @request, :status => :created, :location => @request }
       else
         format.html { render :action => "new" }
@@ -102,12 +102,5 @@ class RequestsController < ApplicationController
     return render_404 unless current_user == @user
     @request = @user.requests.find(params[:id])
     render(:status => "501")
-  end
-  
-  private 
-  
-  def render_404
-    render(:file => "#{Rails.root}/public/404.html", :layout => false, :status => "404")
-    return false
   end
 end

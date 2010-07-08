@@ -1,14 +1,17 @@
 Urlsplease::Application.routes.draw do |map|
   resources :tags
 
-  resources :resources
+  resources :resources   
 
   resources :requests
 
   devise_for :users, :path => 'accounts'
 
   resources :users do
-    resources :requests
+    resources :resources
+    resources :requests do       
+      resources :resources
+    end
   end
 
   get "welcome/index"

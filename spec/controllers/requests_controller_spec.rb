@@ -209,9 +209,9 @@ describe RequestsController do
           assigns(:request).should be(mock_request)
         end
 
-        it "redirects to the created request" do
+        it "redirects to the created request, using authorized user id" do
           post :create, :user_id => "1", :request => {'these' => 'params'}
-          response.should redirect_to(request_url(mock_request))
+          response.should redirect_to(user_request_url(mock_user, mock_request))
         end
       end
 
