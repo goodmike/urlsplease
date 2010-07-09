@@ -18,10 +18,13 @@ describe ResourcesController do
   
   before(:each) do
     @resources = []
-    mock_user.stub!(:resources) { @resources }
+    mock_user.stub(:resources) { @resources }
     controller.stub(:current_user) { mock_user }
     request.env['warden'] = mock_model(Warden, :authenticate => mock_user, :authenticate! => mock_user)
     mock_request.stub(:resources) { @resources }
+    User.stub(:find).with("1") { mock_user }
+    Request.stub(:find).with("2") { mock_request }
+    @resources.stub(:find).with("3") { mock_resource }
   end
 
   describe "GET index" do
@@ -35,10 +38,6 @@ describe ResourcesController do
     end
     
     describe "when authorizing user is presented" do
-      
-      before(:each) do
-        User.stub(:find).with("1") { mock_user }
-      end
       
       it "looks up user" do
         User.should_receive(:find).with("1").and_return(mock_user)
@@ -90,14 +89,14 @@ describe ResourcesController do
   
   describe "GET new" do
     
+    before(:each) do
+      User.stub(:find).with("1") { mock_user }
+      Request.stub(:find).with("2") { mock_request }
+      controller.stub(:current_user) { mock_user }
+      @resources.stub!(:build) { mock_resource }
+    end
+
     describe "when authorizing user and request are present" do
-      
-      before(:each) do
-        User.stub(:find).with("1") { mock_user }
-        Request.stub(:find).with("2") { mock_request }
-        controller.stub(:current_user) { mock_user }
-        @resources.stub!(:build) { mock_resource }
-      end
             
       it "looks up user" do
         User.should_receive(:find).with("1").and_return(mock_user)
@@ -115,68 +114,79 @@ describe ResourcesController do
         get :new, :user_id => "1", :request_id => "2"
       end
       
+      it "assigns user to the request" do
+        mock_resource.should_receive(:user=).with(mock_user)
+        get :new, :user_id => "1", :request_id => "2"
+      end
+      
+      it "renders a 404 page if current user is not authorizing user" do
+        controller.stub(:current_user) { mock_model(User) }
+        controller.should_receive(:current_user) { mock_model(User) }
+        get :new, :user_id => "1", :request_id => "2"
+        response.code.should ==("404")
+      end
+      
       it "assigns new resource as @resource" do
         get :new, :user_id => "1", :request_id => "2"
         assigns(:resource).should be(mock_resource)
       end
     end
+            
+    it "returns a 404 error when no authorizing user is present" do
+      get :new, :request_id => "2"
+      response.code.should ==("404")
+    end
     
-  #   describe "when no authorizing user is present" do
-  #     
-  #     it "returns a 404 error" do
-  #       get :new
-  #       response.code.should ==("404")
-  #     end
-  #   end
+    it "returns a 404 error when no authorizing request is present" do
+      get :new, :user_id => "1"
+      response.code.should ==("404")
+    end
   end
-  #  
-  # describe "GET edit" do
-  #   
-  #   describe "when authorizing user is present" do
-  #     
-  #     before(:each) do
-  #       User.stub(:find).with("1") { mock_user }
-  #       controller.stub(:current_user) { mock_user }
-  #       @resources.stub(:find).with("2") { mock_resource }
-  #     end
-  #           
-  #     it "looks up user" do
-  #       User.should_receive(:find).with("1").and_return(mock_user)
-  #       get :edit, :user_id => "1", :id => "2"
-  #     end
-  #     
-  #     it "determines whether current_user may access user's resources" do
-  #       controller.should_receive(:current_user) { mock_user }
-  #       get :edit, :user_id => "1", :id => "2"
-  #     end
-  #     
-  #     it "finds a resource from the user's resources collection" do
-  #       mock_user.should_receive(:resources) { @resources }
-  #       @resources.should_receive(:find).with("2") { mock_resource }
-  #       get :edit, :user_id => "1", :id => "2"
-  #     end
-  #     
-  #     it "assigns the resource as @resource" do
-  #       get :edit, :user_id => "1", :id => "2"
-  #       assigns(:resource).should be(mock_resource)
-  #     end
-  #     
-  #     it "returns a 404 error when current_user may not access user's resources" do
-  #       controller.stub(:current_user) { mock_model(User) }
-  #       get :edit, :user_id => "1", :id => "2"
-  #       response.code.should ==("404")
-  #     end
-  #   end
-  # 
-  #   describe "when no authorizing user is present" do
-  #     
-  #     it "returns a 404 error" do
-  #       get :edit, :id => 2
-  #       response.code.should ==("404")
-  #     end
-  #   end    
-  # end
-  # 
+  
+  describe "GET edit" do
+    
+    describe "when authorizing user and request params are present" do
+            
+      it "looks up user" do
+        User.should_receive(:find).with("1").and_return(mock_user)
+        get :edit, :user_id => "1", :request_id => "2", :id => "3"
+      end
+            
+      it "looks up request" do
+        Request.should_receive(:find).with("2").and_return(mock_request)
+        get :edit, :user_id => "1", :request_id => "2", :id => "3"
+      end
+      
+      it "renders a 404 error if current user is not authorizing user" do
+        controller.stub(:current_user) { mock_model(User) }
+        get :edit, :user_id => "1", :request_id => "2", :id => "3"
+        response.code.should ==("404")
+      end
+      
+      it "finds response from request's responses" do
+        mock_request.should_receive(:resources) { @resources }
+        @resources.should_receive(:find).with("3") { mock_resource }
+        get :edit, :user_id => "1", :request_id => "2", :id => "3"
+      end
+      
+      it "assigns the resource as @resource" do
+        get :edit, :user_id => "1", :request_id => "2", :id => "3"
+        assigns(:resource).should be(mock_resource)
+      end
+    
+    end
+    
+    it "returns a 404 error when no authorizing user is presented" do
+      get :edit, :request_id => "2", :id => "3"
+      response.code.should ==("404")
+    end
+    it "returns a 404 error when no authorizing request is presented" do
+      get :edit, :user_id => "1", :id => "3"
+      response.code.should ==("404")
+    end
+  end
+
+
   # describe "POST create" do
   #   
   #   describe "when authorizing user is present" do

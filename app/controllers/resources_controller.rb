@@ -31,9 +31,12 @@ class ResourcesController < ApplicationController
   # GET /resources/new
   # GET /resources/new.xml
   def new
+    return render_404 unless params[:user_id] && params[:request_id]
     @user = User.find(params[:user_id])
+    return render_404 unless current_user == @user
     @request = Request.find(params[:request_id])
     @resource = @request.resources.build
+    @resource.user = @user
 
     respond_to do |format|
       format.html # new.html.erb
@@ -43,7 +46,11 @@ class ResourcesController < ApplicationController
 
   # GET /resources/1/edit
   def edit
-    @resource = Resource.find(params[:id])
+    return render_404 unless params[:user_id] && params[:request_id]
+    @user = User.find(params[:user_id])
+    return render_404 unless current_user == @user
+    @request = Request.find(params[:request_id])
+    @resource = @request.resources.find(params[:id])
   end
 
   # POST /resources
