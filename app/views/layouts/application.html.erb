@@ -1,8 +1,14 @@
 <html>
 <head>
-<title>URLs Please</title>
+<title>URLs Please | <%= yield :title %></title>
   <link rel="stylesheet" href="/stylesheets/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
   <%= yield :head %>
+  <script type="text/javascript" charset="utf-8">
+    <%= yield :js %>
+  </script>
+  <style type="text/css" media="screen">
+    <%= yield :css %>
+  </style>
 </head>
 <body>
 <div id="body_head">
@@ -15,7 +21,8 @@
   <% else %>
     <%= link_to "Sign in", new_user_session_path -%> or 
     <%= link_to "Sign up", new_user_registration_path -%>
-  <% end %> 
+  <% end -%> 
+  | <%= link_to "Home", root_path %>
   </div>
 
   <h1>URLs Please</h1>

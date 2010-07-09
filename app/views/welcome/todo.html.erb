@@ -1,29 +1,47 @@
+<% content_for :title do "To-do items" end %>
+
+<% content_for :css do %>
+ul.retired li {
+  text-decoration: strike-through;
+}
+<% end %>
+
 <h2>To-do</h2>
 
 <p>I'm just getting started here.</p>
 
+<h3>Coming up:</h3>
 <ul>
-  <li>Functionality: Navigation, Homepage, etc.</li>
+  <li>Nested Resources in Requests, incl. listing and post link on Request page</li>
+  <li>Tags for request characterization</li>
   <li>(Slightly) nicer layout, pitchy copy.</li>
   <li>Free, and in search of customers.</li>
   <li>Point URL to heroku app. Zerigo, custom domain.</li>
-  <li>Blog post, twitter, personal emails.</li>
-  <li>
+  <li>Add urlsplease github account.</li>
+  <li>Flog: blog posts, twitter, personal emails.</li>
+</ul>
+<h3>In sight:</h3>
+<ul>
   <li>Anti-robot on signup, post.</li>
   <li>Google apps for email.</li>
-  <li>
   <li>OpenID only, srly</li>
-  <li>
-  <li>Tags, searchable</li>
+  <li>Tags for resource, user expertise characterization</li>
+  <li>Search by tags</li>
   <li>Ratings by click, user reputation</li>
   <li>Applaud and complain</li>
-  <li>
   <li>Summary gathering (scraping)</li>
   <li>Bayesian analysis for spam, link farms</li>
-  <li>Rate well-formatted and accessible HTML higher</li>
-  <li>Rate high google score HTML higher</li>
+  <li>Search by request contents</li>
+  <li>Rate well-formatted and accessible HTML resources higher</li>
+</ul>
+<h3>A gleam in your eye</h3>
+<ul>
+  <li>Rate high google score resources higher</li>
   <li>Admin review and/or review requests by experts (by tag)</li>
+  <li>Social network integration: Tweet or FB status update for request, (hashtags too). Post popular requests, responses to content aggravators.</li>
+</ul>
 
-  <li>Social network integration: Tweet or FB status update for request, (hashtags too)</li>
-  <li>Social network integration: Post popular requests, responses to reddit, HN (if applic), etc.</li>
+<h3>Retired:</h3>
+<ul class="retired">
+  <li>Basic Navigation, Homepage, etc.</li>
 </ul>
