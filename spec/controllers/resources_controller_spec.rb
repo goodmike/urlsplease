@@ -18,9 +18,10 @@ describe ResourcesController do
   
   before(:each) do
     @resources = []
+    mock_user.stub!(:resources) { @resources }
     controller.stub(:current_user) { mock_user }
     request.env['warden'] = mock_model(Warden, :authenticate => mock_user, :authenticate! => mock_user)
-    mock_user.stub(:resources) { @resources }
+    mock_request.stub(:resources) { @resources }
   end
 
   describe "GET index" do
@@ -58,7 +59,7 @@ describe ResourcesController do
       before(:each) do
         User.stub(:find).with("1") { mock_user }
         controller.stub(:current_user) { mock_user }
-        @resources.stub(:find).with("2") { [mock_resource] }
+        @resources.stub(:find).with("2") { mock_resource }
       end
             
       it "looks up user" do
@@ -67,7 +68,7 @@ describe ResourcesController do
       end
       
       it "looks up resource from user's resources" do
-        @resources.should_receive(:find).with("2") { [mock_resource] }
+        @resources.should_receive(:find).with("2") { mock_resource }
         get :show, :user_id => "1", :id => "2"
       end
       
@@ -87,44 +88,39 @@ describe ResourcesController do
     end
   end
   
-  # describe "GET new" do
-  #   
-  #   describe "when authorizing user is present" do
-  #     
-  #     before(:each) do
-  #       User.stub(:find).with("1") { mock_user }
-  #       controller.stub(:current_user) { mock_user }
-  #       @resources.stub!(:build) { mock_resource }
-  #     end
-  #           
-  #     it "looks up user" do
-  #       User.should_receive(:find).with("1").and_return(mock_user)
-  #       get :new, :user_id => "1"
-  #     end
-  #     
-  #     it "determines whether current_user may access user's resources" do
-  #       controller.should_receive(:current_user) { mock_user }
-  #       get :new, :user_id => "1"
-  #     end
-  #     
-  #     it "builds a new resource from the user's resources collection" do
-  #       mock_user.should_receive(:resources) { @resources }
-  #       @resources.should_receive(:build) { mock_resource }
-  #       get :new, :user_id => "1"
-  #     end
-  #     
-  #     it "assigns a new resource as @resource" do
-  #       get :new, :user_id => "1"
-  #       assigns(:resource).should be(mock_resource)
-  #     end
-  #     
-  #     it "returns a 404 error when current_user may not access user's resources" do
-  #       controller.stub(:current_user) { mock_model(User) }
-  #       get :new, :user_id => "1"
-  #       response.code.should ==("404")
-  #     end
-  #   end
-  #   
+  describe "GET new" do
+    
+    describe "when authorizing user and request are present" do
+      
+      before(:each) do
+        User.stub(:find).with("1") { mock_user }
+        Request.stub(:find).with("2") { mock_request }
+        controller.stub(:current_user) { mock_user }
+        @resources.stub!(:build) { mock_resource }
+      end
+            
+      it "looks up user" do
+        User.should_receive(:find).with("1").and_return(mock_user)
+        get :new, :user_id => "1", :request_id => "2"
+      end
+      
+      it "looks up request" do
+        Request.should_receive(:find).with("2").and_return(mock_request)
+        get :new, :user_id => "1", :request_id => "2"
+      end
+      
+      it "builds a new resource from the request's resources collection" do
+        mock_request.should_receive(:resources) { @resources }
+        @resources.should_receive(:build) { mock_resource }
+        get :new, :user_id => "1", :request_id => "2"
+      end
+      
+      it "assigns new resource as @resource" do
+        get :new, :user_id => "1", :request_id => "2"
+        assigns(:resource).should be(mock_resource)
+      end
+    end
+    
   #   describe "when no authorizing user is present" do
   #     
   #     it "returns a 404 error" do
@@ -132,7 +128,7 @@ describe ResourcesController do
   #       response.code.should ==("404")
   #     end
   #   end
-  # end
+  end
   #  
   # describe "GET edit" do
   #   

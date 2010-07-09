@@ -31,7 +31,9 @@ class ResourcesController < ApplicationController
   # GET /resources/new
   # GET /resources/new.xml
   def new
-    @resource = Resource.new
+    @user = User.find(params[:user_id])
+    @request = Request.find(params[:request_id])
+    @resource = @request.resources.build
 
     respond_to do |format|
       format.html # new.html.erb
