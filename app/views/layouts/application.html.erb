@@ -16,6 +16,7 @@
   <% if user_signed_in? -%>
     Signed in as <%= current_user.nickname %>. 
     <%= link_to "Sign out", destroy_user_session_path -%> |
+    <%= link_to "My Requests", user_requests_path(current_user) %><br />
     <%= link_to "Make a request", new_user_request_path(current_user) %> | 
     <%= link_to "Review requests", requests_path %>
   <% else %>

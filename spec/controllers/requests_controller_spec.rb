@@ -3,6 +3,10 @@ require 'spec_helper'
 describe RequestsController do
 
   include Devise::TestHelpers
+  
+  def mock_resource(stubs={})
+    @mock_resource ||= mock_model(Resource, stubs).as_null_object
+  end
 
   def mock_request(stubs={})
     @mock_request ||= mock_model(Request, stubs).as_null_object
@@ -14,8 +18,9 @@ describe RequestsController do
   
   before(:each) do
     @requests = []
-    controller.stub(:current_user) { mock_user }
     request.env['warden'] = mock_model(Warden, :authenticate => mock_user, :authenticate! => mock_user)
+    User.stub(:find).with("1") { mock_user }
+    controller.stub(:current_user) { mock_user }
     mock_user.stub(:requests) { @requests }
   end
 
@@ -52,9 +57,12 @@ describe RequestsController do
     describe "when authorizing user is present" do
       
       before(:each) do
-        User.stub(:find).with("1") { mock_user }
-        controller.stub(:current_user) { mock_user }
-        @requests.stub(:find).with("2") { [mock_request] }
+        @requests.stub(:find).with("2") { mock_request }
+        @resources = [mock_resource]
+        @resources.stub(:build) { mock_resource }
+        mock_request.stub(:resources) { @resources }
+        @tags = [ mock_model(Tag, :tag => :mock) ]
+        mock_request.stub(:tags) { @tags }
       end
             
       it "looks up user" do
@@ -63,8 +71,30 @@ describe RequestsController do
       end
       
       it "looks up request from user's requests" do
-        @requests.should_receive(:find).with("2") { [mock_request] }
+        @requests.should_receive(:find).with("2") { mock_request }
         get :show, :user_id => "1", :id => "2"
+      end
+      
+      it "assigns request to view" do
+        get :show, :user_id => "1", :id => "2"
+        assigns[:request].should ==(mock_request)
+      end
+      
+      it "assigns request's resources to view" do
+        get :show, :user_id => "1", :id => "2"
+        assigns[:resources].should ==( @resources )
+      end
+      
+      it "assigns request's tags to view" do
+        get :show, :user_id => "1", :id => "2"
+        assigns[:tags].should ==(@tags)
+      end
+      
+      it "builds a new resource object, from request, for response form" do
+        mock_request.should_receive(:resources) { @resources }
+        @resources.should_receive(:build) { mock_resource }
+        get :show, :user_id => "1", :id => "2"
+        assigns[:resource].should ==(mock_resource)
       end
       
       it "allows a user to view another user's request" do
@@ -88,8 +118,6 @@ describe RequestsController do
     describe "when authorizing user is present" do
       
       before(:each) do
-        User.stub(:find).with("1") { mock_user }
-        controller.stub(:current_user) { mock_user }
         @requests.stub!(:build) { mock_request }
       end
             
@@ -316,61 +344,10 @@ describe RequestsController do
       response.should_not be_success
     end
     
-    describe "when authorizing user param is present" do
-
-      before(:each) do
-        User.stub(:find).with("1") { mock_user }
-        controller.stub(:current_user) { mock_user }
-        @requests.stub(:find).with("2") { mock_request }
-      end
-            
-      it "looks up user" do
-        User.should_receive(:find).with("1").and_return(mock_user)
-        delete :destroy, :user_id => "1", :id => "2"
-      end
-      
-      it "determines whether current_user may access user's resources" do
-        controller.should_receive(:current_user) { mock_user }
-        delete :destroy, :user_id => "1", :id => "2"
-      end
-      
-      it "finds a request from the user's requests collection" do
-        mock_user.should_receive(:requests) { @requests }
-        @requests.should_receive(:find).with("2") { mock_request }
-        delete :destroy, :user_id => "1", :id => "2"
-      end
-      
-      it "assigns the request as @request" do
-        delete :destroy, :user_id => "1", :id => "2"
-        assigns(:request).should be(mock_request)
-      end
-    
-      it "does NOT destroy the requested request" do
-        mock_request.should_not_receive(:destroy)
-        delete :destroy, :user_id => "1", :id => "2"
-      end
-
-      it "displays the destroy view with code 501" do
-        delete :destroy, :user_id => "1", :id => "2"
-        response.should render_template("destroy")
-        response.code.should ==("501")
-      end
-    
-      it "returns a 404 error when current_user may not access user's resources" do
-        controller.stub(:current_user) { mock_model(User) }
-        get :edit, :user_id => "1", :id => "2"
-        response.code.should ==("404")
-      end
+   it "displays the destroy view with code 501" do
+      delete :destroy, :user_id => "1", :id => "2"
+      response.should render_template("destroy")
+      response.code.should ==("501")
     end
-    
-    describe "when no authorizing user is present" do
-      
-      it "returns a 404 error" do
-        delete :destroy, :id => "2"
-        response.code.should ==("404")
-      end
-    end
-
   end
-
 end

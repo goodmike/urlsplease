@@ -56,11 +56,17 @@ class ResourcesController < ApplicationController
   # POST /resources
   # POST /resources.xml
   def create
-    @resource = Resource.new(params[:resource])
+    return render_404 unless params[:user_id] && params[:request_id]
+    @user = User.find(params[:user_id])
+    return render_404 unless current_user == @user
+    @request = Request.find(params[:request_id])
+    @resource = @request.resources.build(params[:resource])
+    @resource.user = @user
 
     respond_to do |format|
       if @resource.save
-        format.html { redirect_to(@resource, :notice => 'Resource was successfully created.') }
+        format.html { redirect_to(user_request_path(@request.user, @request), 
+                                  :notice => 'Resource was successfully created.') }
         format.xml  { render :xml => @resource, :status => :created, :location => @resource }
       else
         format.html { render :action => "new" }
@@ -72,27 +78,23 @@ class ResourcesController < ApplicationController
   # PUT /resources/1
   # PUT /resources/1.xml
   def update
-    @resource = Resource.find(params[:id])
-
-    respond_to do |format|
-      if @resource.update_attributes(params[:resource])
-        format.html { redirect_to(@resource, :notice => 'Resource was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @resource.errors, :status => :unprocessable_entity }
-      end
-    end
+    render(:status => "501") # No updates permitted.
   end
 
   # DELETE /resources/1
   # DELETE /resources/1.xml
   def destroy
-    @resource = Resource.find(params[:id])
+    return render_404 unless params[:user_id] && params[:request_id]
+    @user = User.find(params[:user_id])
+    return render_404 unless current_user == @user
+    @request = @user.requests.find(params[:request_id])
+    
+    @resource = @request.resources.find(params[:id])
     @resource.destroy
 
     respond_to do |format|
-      format.html { redirect_to(resources_url) }
+      format.html { redirect_to(user_request_path(@user, @request), 
+                                :notice => 'Resource was deleted.') }
       format.xml  { head :ok }
     end
   end

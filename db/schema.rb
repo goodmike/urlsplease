@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100706194436) do
+ActiveRecord::Schema.define(:version => 20100712201419) do
 
   create_table "requests", :force => true do |t|
     t.text     "requirements"
@@ -22,6 +22,15 @@ ActiveRecord::Schema.define(:version => 20100706194436) do
     t.string   "url"
     t.integer  "request_id"
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "taggings", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "taggable_id"
+    t.string   "taggable_type"
+    t.integer  "tag_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

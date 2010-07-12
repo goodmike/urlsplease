@@ -187,199 +187,164 @@ describe ResourcesController do
   end
 
 
-  # describe "POST create" do
-  #   
-  #   describe "when authorizing user is present" do
-  #     
-  #     before(:each) do
-  #       User.stub(:find).with("1") { mock_user }
-  #       controller.stub(:current_user) { mock_user }
-  #       @resources.stub!(:build) { mock_resource(:save => true) }
-  #     end
-  #           
-  #     it "looks up user" do
-  #       User.should_receive(:find).with("1").and_return(mock_user)
-  #       post :create, :user_id => "1", :resource => {'these' => 'params'}
-  #     end
-  #     
-  #     it "determines whether current_user may access user's resources" do
-  #       controller.should_receive(:current_user) { mock_user }
-  #       post :create, :user_id => "1", :resource => {'these' => 'params'}
-  #     end
-  #     
-  #     describe "with valid params" do
-  #       it "builds a new resource from the user's resources collection and assigns it as @resource" do
-  #         mock_user.should_receive(:resources) { @resources }
-  #         @resources.should_receive(:build).with({'these' => 'params'}) { mock_resource }
-  #         post :create, :user_id => "1", :resource => {'these' => 'params'}
-  #       end
-  #       
-  #       it "assigns the new resource as @resource" do
-  #         post :create, :user_id => "1", :resource => {'these' => 'params'}
-  #         assigns(:resource).should be(mock_resource)
-  #       end
-  # 
-  #       it "redirects to the created resource, using authorized user id" do
-  #         post :create, :user_id => "1", :resource => {'these' => 'params'}
-  #         response.should redirect_to(user_resource_url(mock_user, mock_resource))
-  #       end
-  #     end
-  # 
-  #     describe "with invalid params" do
-  #       it "assigns a newly created but unsaved resource as @resource" do
-  #         @resources.stub(:build) { mock_resource(:save => false) }
-  #         post :create, :user_id => "1", :resource => {'these' => 'params'}
-  #         assigns(:resource).should be(mock_resource)
-  #       end
-  # 
-  #       it "re-renders the 'new' template" do
-  #         @resources.stub(:build) { mock_resource(:save => false) }
-  #         post :create, :user_id => "1", :resource => {'these' => 'params'}
-  #         response.should render_template("new")
-  #       end
-  #     end
-  #     
-  #     it "returns a 404 error when current_user is not authenticated as user" do
-  #       controller.stub(:current_user) { mock_model(User) }
-  #       post :create, :user_id => "1", :resource => {'these' => 'params'}
-  #       response.code.should ==("404")
-  #     end
-  #   end
-  #   
-  #   describe "when no authorizing user is present" do
-  #     
-  #     it "returns a 404 error" do
-  #       post :create, :resource => {'these' => 'params'}
-  #       response.code.should ==("404")
-  #     end
-  #   end
-  # end
-  #  
-  # describe "PUT update" do
-  #   
-  #   describe "when authorizing user is present" do
-  #     
-  #     before(:each) do
-  #       User.stub(:find).with("1") { mock_user }
-  #       controller.stub(:current_user) { mock_user }
-  #       @resources.stub!(:find) { mock_resource(:update_attributes => true) }
-  #     end
-  #           
-  #     it "looks up user" do
-  #       User.should_receive(:find).with("1").and_return(mock_user)
-  #       put :update, :user_id => "1", :id => "2", :resource => {'these' => 'params'}
-  #     end
-  #     
-  #     it "determines whether current_user is user" do
-  #       controller.should_receive(:current_user) { mock_user }
-  #       put :update, :user_id => "1", :id => "2", :resource => {'these' => 'params'}
-  #     end
-  #     
-  #     describe "with valid params" do
-  #       it "updates the resourceed resource" do
-  #         @resources.should_receive(:find).with("2") { mock_resource }
-  #         mock_resource.should_receive(:update_attributes).with({'these' => 'params'})
-  #         put :update, :user_id => "1", :id => "2", :resource => {'these' => 'params'}
-  #       end
-  # 
-  #       it "assigns the resourceed resource as @resource" do
-  #         @resources.stub(:find) { mock_resource(:update_attributes => true) }
-  #         put :update, :user_id => "1", :id => "2"
-  #         assigns(:resource).should be(mock_resource)
-  #       end
-  # 
-  #       it "redirects to the resource" do
-  #         @resources.stub(:find) { mock_resource(:update_attributes => true) }
-  #         put :update, :user_id => "1", :id => "2"
-  #         response.should redirect_to(resource_url(mock_resource))
-  #       end
-  #     end
-  # 
-  #     describe "with invalid params" do
-  #       it "assigns the resource as @resource" do
-  #         @resources.stub(:find) { mock_resource(:update_attributes => false) }
-  #         put :update, :user_id => "1", :id => "2"
-  #         assigns(:resource).should be(mock_resource)
-  #       end
-  # 
-  #       it "re-renders the 'edit' template" do
-  #         @resources.stub(:find) { mock_resource(:update_attributes => false) }
-  #         put :update, :user_id => "1", :id => "2"
-  #         response.should render_template("edit")
-  #       end
-  #     end
-  #   end
-  #   
-  #   describe "when no authorizing user is present" do
-  #     
-  #     it "returns a 404 error" do
-  #       put :update, :id => "2", :resource => {'these' => 'params'}
-  #       response.code.should ==("404")
-  #     end
-  #   end
-  # end
-  # 
-  # describe "DELETE destroy" do
-  #   
-  #   it "should not be accessible by GET" do
-  #     get :destroy, :user_id => "1", :id => "2"
-  #     response.should_not be_success
-  #   end
-  #   
-  #   describe "when authorizing user param is present" do
-  # 
-  #     before(:each) do
-  #       User.stub(:find).with("1") { mock_user }
-  #       controller.stub(:current_user) { mock_user }
-  #       @resources.stub(:find).with("2") { mock_resource }
-  #     end
-  #           
-  #     it "looks up user" do
-  #       User.should_receive(:find).with("1").and_return(mock_user)
-  #       delete :destroy, :user_id => "1", :id => "2"
-  #     end
-  #     
-  #     it "determines whether current_user may access user's resources" do
-  #       controller.should_receive(:current_user) { mock_user }
-  #       delete :destroy, :user_id => "1", :id => "2"
-  #     end
-  #     
-  #     it "finds a resource from the user's resources collection" do
-  #       mock_user.should_receive(:resources) { @resources }
-  #       @resources.should_receive(:find).with("2") { mock_resource }
-  #       delete :destroy, :user_id => "1", :id => "2"
-  #     end
-  #     
-  #     it "assigns the resource as @resource" do
-  #       delete :destroy, :user_id => "1", :id => "2"
-  #       assigns(:resource).should be(mock_resource)
-  #     end
-  #   
-  #     it "does NOT destroy the resourceed resource" do
-  #       mock_resource.should_not_receive(:destroy)
-  #       delete :destroy, :user_id => "1", :id => "2"
-  #     end
-  # 
-  #     it "displays the destroy view with code 501" do
-  #       delete :destroy, :user_id => "1", :id => "2"
-  #       response.should render_template("destroy")
-  #       response.code.should ==("501")
-  #     end
-  #   
-  #     it "returns a 404 error when current_user may not access user's resources" do
-  #       controller.stub(:current_user) { mock_model(User) }
-  #       get :edit, :user_id => "1", :id => "2"
-  #       response.code.should ==("404")
-  #     end
-  #   end
-  #   
-  #   describe "when no authorizing user is present" do
-  #     
-  #     it "returns a 404 error" do
-  #       delete :destroy, :id => "2"
-  #       response.code.should ==("404")
-  #     end
-  #   end
-  # end
+  describe "POST create" do
+
+    before(:each) do
+      @resources.stub!(:build) { mock_resource(:save => true) }
+      mock_resource.stub(:user=)
+      @requesting_user = mock_model(User)
+      mock_request.stub(:user) { @requesting_user }
+    end
+        
+    describe "when authorizing user and request present" do
+            
+      it "looks up user" do
+        User.should_receive(:find).with("1").and_return(mock_user)
+        post :create, :user_id => "1", :request_id => "2", :resource => {'these' => 'params'}
+      end
+      
+      it "looks up request" do
+        Request.should_receive(:find).with("2").and_return(mock_request)
+        post :create, :user_id => "1", :request_id => "2", :resource => {'these' => 'params'}
+      end
+      
+      it "determines whether current_user may access user's resources" do
+        controller.should_receive(:current_user) { mock_user }
+        post :create, :user_id => "1", :request_id => "2", :resource => {'these' => 'params'}
+      end
+      
+      it "returns a 404 error when current_user is not authenticated as user" do
+        controller.stub(:current_user) { mock_model(User) }
+        post :create, :user_id => "1", :request_id => "2", :resource => {'these' => 'params'}
+        response.code.should ==("404")
+      end
+      
+      
+      describe "with valid params" do
+        it "builds a new resource from the request's resources collection and assigns it as @resource" do
+          mock_request.should_receive(:resources) { @resources }
+          @resources.should_receive(:build).with({'these' => 'params'}) { mock_resource }
+          post :create, :user_id => "1", :request_id => "2", :resource => {'these' => 'params'}
+        end
+        
+        it "assigns the authorizing user as the resource's user" do
+          mock_resource.should_receive(:user=).with(mock_user)
+          post :create, :user_id => "1", :request_id => "2", :resource => {'these' => 'params'}
+        end
+        
+        it "assigns the new resource as @resource" do
+          post :create, :user_id => "1", :request_id => "2", :resource => {'these' => 'params'}
+          assigns(:resource).should be(mock_resource)
+        end
+  
+        it "redirects to the resource's request's page, using request's user id" do
+          post :create, :user_id => "1", :request_id => "2", :resource => {'these' => 'params'}
+          response.should redirect_to(user_request_url(@requesting_user, mock_request))
+        end
+      end
+  
+      describe "with invalid params" do
+        it "assigns a newly created but unsaved resource as @resource" do
+          mock_resource.stub(:save) { false }
+          post :create, :user_id => "1", :request_id => "2", :resource => {'these' => 'params'}
+          assigns(:resource).should be(mock_resource)
+        end
+  
+        it "re-renders the 'new' template" do
+          mock_resource.stub(:save) { false }
+          post :create, :user_id => "1", :request_id => "2", :resource => {'these' => 'params'}
+          response.should render_template("new")
+        end
+      end
+    end
+    
+    it "returns a 404 error when no authorizing user is present" do
+      post :create, :request_id => "2", :resource => {'these' => 'params'}
+      response.code.should ==("404")
+    end
+          
+    it "returns a 404 error when no authorizing request is present" do
+      post :create, :user_id => "1", :resource => {'these' => 'params'}
+      response.code.should ==("404")
+    end
+  end
+   
+  describe "PUT update" do
+    
+    it "should render update template with 501 response code" do
+      put :update, :user_id => "1", :request_id => "2", :id => "3"
+      response.should render_template("update")
+      response.code.should ==("501")
+    end
+  end
+  
+  describe "DELETE destroy" do
+    
+    it "should not be accessible by GET" do
+      get :destroy, :user_id => "1", :request_id => "2", :id => "3"
+      response.should_not be_success
+    end
+    
+    describe "when authorizing user param is present" do
+  
+      before(:each) do
+        @requests = []
+        @requests.stub(:find).with("2") { mock_request }
+        mock_user.stub(:requests) { @requests }
+        mock_resource.stub(:destroy) 
+      end
+            
+      it "looks up user" do
+        User.should_receive(:find).with("1").and_return(mock_user)
+        delete :destroy, :user_id => "1", :request_id => "2", :id => "3"
+      end
+      
+      it "determines whether current_user may access user's resources" do
+        controller.should_receive(:current_user) { mock_user }
+        delete :destroy, :user_id => "1", :request_id => "2", :id => "3"
+      end
+      
+      it "returns a 404 error when current_user may not access user's resources" do
+        controller.stub(:current_user) { mock_model(User) }
+        delete :destroy, :user_id => "1", :request_id => "2", :id => "3"
+        response.code.should ==("404")
+      end
+      
+      it "finds request from the user's requests collection" do
+        mock_user.should_receive(:requests) { @requests }
+        @requests.should_receive(:find).with("2") { mock_request }
+        delete :destroy, :user_id => "1", :request_id => "2", :id => "3"
+      end
+      
+      it "finds resource from the authorizing request's resources collection" do
+        @requests.should_receive(:find).with("2") { mock_request }
+        delete :destroy, :user_id => "1", :request_id => "2", :id => "3"
+      end
+    
+      it "destroys the resource" do
+        mock_resource.should_receive(:destroy)
+        delete :destroy, :user_id => "1", :request_id => "2", :id => "3"
+      end
+  
+      it "should mark resources as removed instead of deleting record" do
+        pending("to do")
+      end
+      
+      it "redirects to the resource's request's page, using request's user id" do
+        delete :destroy, :user_id => "1", :request_id => "2", :id => "3"
+        response.should redirect_to(user_request_url(mock_user, mock_request))
+      end
+    end
+
+    it "returns a 404 error when no authorizing user is present" do
+      delete :destroy, :request_id => "2", :id => "3"
+      response.code.should ==("404")
+    end
+
+    it "returns a 404 error when no authorizing request is present" do
+      delete :destroy, :user_id => "1", :id => "3"
+      response.code.should ==("404")
+    end
+  end
 
 end

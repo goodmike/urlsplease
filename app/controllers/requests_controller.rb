@@ -25,8 +25,11 @@ class RequestsController < ApplicationController
   # GET /requests/1.xml
   def show
     return render_404 unless params[:user_id]
-    @user = User.find(params[:user_id])
-    @request = @user.requests.find(params[:id])
+    @user      = User.find(params[:user_id])
+    @request   = @user.requests.find(params[:id])
+    @resources = @request.resources
+    @resource  = @resources.build() # For quick-response form
+    @tags      = @request.tags
 
     respond_to do |format|
       format.html # show.html.erb
@@ -97,10 +100,6 @@ class RequestsController < ApplicationController
   # DELETE /requests/1
   # DELETE /requests/1.xml
   def destroy
-    return render_404 unless params[:user_id]
-    @user = User.find(params[:user_id])
-    return render_404 unless current_user == @user
-    @request = @user.requests.find(params[:id])
-    render(:status => "501")
+    render(:status => "501") # destroy not permitted
   end
 end

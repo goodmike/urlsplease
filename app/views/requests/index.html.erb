@@ -5,15 +5,13 @@
 <table>
   <tr>
     <th>Requirements</th>
-    <th>User</th>
-    <th></th>
+    <th>Posted by</th>
   </tr>
 
 <% @requests.each do |request| %>
   <tr>
-    <td><%= request.requirements %></td>
+    <td><%= link_to request.requirements, user_request_path(request.user, request) %></td>
     <td><%= request.user.nickname %></td>
-    <td><%= link_to 'More', user_request_path(request.user, request) %></td>
 
   </tr>
 <% end %>
