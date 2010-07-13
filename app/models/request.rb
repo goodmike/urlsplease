@@ -8,12 +8,19 @@ class Request < ActiveRecord::Base
   validates :requirements, :presence => true
   
   # user is not accessible to mass assign: must be set explicitly
-  attr_accessible :requirements
+  attr_accessor   :new_tags
+  attr_accessible :requirements, :new_tags
   
-  def tag(author, tag_string)
-    tags = tag_string.split(/,\w*/)
-    tags.each do |contents|
-      taggings.build(:user => author, :contents => contents)
+  before_save :tag
+  
+  def tag(author = false, tag_string = false)
+    author   ||= self.user
+    new_tags = @new_tags || tag_string
+    if new_tags
+      new_tags.split(/,\w*/).each do |contents|
+        t = Tagging.new(:taggable => self, :user => author, :contents => contents)
+        taggings.build(:user => author, :contents => contents) if t.valid?
+      end
     end
   end
   

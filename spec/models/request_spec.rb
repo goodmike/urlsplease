@@ -57,9 +57,30 @@ describe Request do
     end
   end
   
+  describe "when saved with 'new_tags' attribute" do
+    
+    before(:each) do
+      @req = new_request(:new_tags => "two, tags")
+    end
+    
+    it "creates new records for taggings" do
+      @req.save
+      @req.taggings.size.should ==(2)
+    end
+    
+    it "still saves request record when duplicate tagging is discovered" do
+      @req = new_request()
+      @req.new_tags = "two, tags"
+      @req.save
+      @req.new_tags = "two, more"
+      assert @req.save
+    end
+  end
+  
   it "returns tags from its taggings in response to :tags" do
     @req = new_request
     @req.tag(mock_user,"three, little, pigs")
     @req.tags.size.should ==(3)
   end
+  
 end
