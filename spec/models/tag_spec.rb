@@ -46,5 +46,10 @@ describe Tag do
     t.contents.should ==("1 bunny")
   end
   
+  it "return all tagged requests in reverse chronological order" do
+    pending("This works, but is a pain in the ass to mock")
+    tag.taggings.find_requests.should ==(expected_array)
+  end
+  
   
 end

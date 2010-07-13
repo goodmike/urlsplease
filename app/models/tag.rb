@@ -1,7 +1,12 @@
 class Tag < ActiveRecord::Base
   
   validates :contents, :presence => true, :uniqueness => true
-  has_many :taggings
+  has_many :taggings do
+    def find_requests(limit=10)
+      reqs = where(:taggable_type => "Request").limit(limit).collect &:taggable
+      reqs.sort {|a,b| b.created_at <=> a.created_at }
+    end
+  end
   
   def initialize(opts={})
     super

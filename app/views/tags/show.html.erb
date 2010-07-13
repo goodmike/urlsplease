@@ -1,3 +1,5 @@
+<% content_for :title do  "Tag #{@tag.contents}"  end %>
+
 <p id="notice"><%= notice %></p>
 
 <p>
@@ -5,6 +7,12 @@
   <%= @tag.contents %>
 </p>
 
+<p>
+  <b>Recent uses:</b>
+  <% @requests.each do |req| %>
+<p><%= link_to req.requirements, user_request_path(req.user, req) %> by 
+   <%= req.user.nickname %></p>
+  <% end %>
 
 <%= link_to 'Edit', edit_tag_path(@tag) %> |
 <%= link_to 'Back', tags_path %>

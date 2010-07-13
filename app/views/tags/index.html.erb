@@ -1,23 +1,4 @@
-<h1>Listing tags</h1>
+<% content_for :title do  "Recent tags"  end %>
 
-<table>
-  <tr>
-    <th>Contents</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @tags.each do |tag| %>
-  <tr>
-    <td><%= tag.contents %></td>
-    <td><%= link_to 'Show', tag %></td>
-    <td><%= link_to 'Edit', edit_tag_path(tag) %></td>
-    <td><%= link_to 'Destroy', tag, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
-
-<%= link_to 'New Tag', new_tag_path %>
+<h2>Recent tags</h2>
+<%= raw @tags.collect { |tag| link_to tag.contents, tag_path(tag) }.join ", "%>
