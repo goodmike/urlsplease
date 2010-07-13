@@ -10,17 +10,10 @@ class Tagging < ActiveRecord::Base
   
   before_validation   :lookup_tag
   
-  def ==(other)
-    self.user == other.user                   && 
-    self.taggable_type == other.taggable_type &&
-    self.taggable_id   == other.taggable_id   &&
-    self.tag_id        == other.tag_id
-  end
-  
   def lookup_tag()
     if contents.present? && self.tag.blank?
-      self.tag = Tag.where(:contents => contents).first
-      self.tag ||= Tag.new(:contents => contents)
+      new_tag = Tag.new(:contents => contents)
+      self.tag = Tag.where(:contents => new_tag.contents).first || new_tag
     end
   end
 end

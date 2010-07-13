@@ -306,10 +306,10 @@ describe RequestsController do
           assigns(:request).should be(mock_request)
         end
 
-        it "redirects to the request" do
+        it "redirects to the user's view of request" do
           @requests.stub(:find) { mock_request(:update_attributes => true) }
           put :update, :user_id => "1", :id => "2"
-          response.should redirect_to(request_url(mock_request))
+          response.should redirect_to(user_request_url(mock_user,mock_request))
         end
       end
 

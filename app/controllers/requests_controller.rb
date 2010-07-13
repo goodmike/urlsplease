@@ -88,7 +88,7 @@ class RequestsController < ApplicationController
 
     respond_to do |format|
       if @request.update_attributes(params[:request])
-        format.html { redirect_to(@request, :notice => 'Request was successfully updated.') }
+        format.html { redirect_to(user_request_path(@user,@request), :notice => 'Request was successfully updated.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

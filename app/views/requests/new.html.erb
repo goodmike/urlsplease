@@ -3,6 +3,32 @@
 <h2>New request</h2>
 
 <p>What would you like to know?</p>
-<%= render 'form' %>
+
+<%= form_for(@request, :url => user_requests_path(@user)) do |f| %>
+  <% if @request.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@request.errors.count, "error") %> prohibited this request from being saved:</h2>
+
+      <ul>
+      <% @request.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :requirements %><br />
+    <%= f.text_area :requirements %>
+  </div>
+  
+  <div class="field">
+    <%= f.label :tags %> (separated by commas)<br />
+    <%= f.text_area :new_tags %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
 
 <%= link_to 'Back', requests_path %>

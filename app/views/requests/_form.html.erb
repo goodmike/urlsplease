@@ -16,9 +16,13 @@
     <%= f.text_area :requirements %>
   </div>
   
+<% unless @request.taggings.blank? %>
+  <p><b>Existing tags</b>: <%= @request.tags.collect(&:contents).join(', ') %></p>
+<% end %>
+  
   <div class="field">
     <%= f.label :tags %> (separated by commas)<br />
-    <%= f.text_area :tags %>
+    <%= f.text_area :new_tags %>
   </div>
   <div class="actions">
     <%= f.submit %>
