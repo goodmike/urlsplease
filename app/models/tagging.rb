@@ -5,6 +5,8 @@ class Tagging < ActiveRecord::Base
   belongs_to    :tag
   
   attr_accessor :contents
+  validates_uniqueness_of :tag_id, :scope => [:taggable_id, :taggable_type, :user_id]
+  
   before_save   :lookup_tag
   
   def lookup_tag()

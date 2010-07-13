@@ -13,6 +13,14 @@ describe Tagging do
     }
   end
   
+  it "enforces uniqueness of tag, user author, and taggable" do
+    mock_request = mock_model(Request)
+    mock_user    = mock_model(User)
+    Tagging.create(:tag => mock_tag, :user => mock_user, :taggable => mock_request)
+    Tagging.create(:tag => mock_tag, :user => mock_user, :taggable => mock_request)
+    Tagging.all.size.should ==(1)
+  end
+  
   describe "on initialization" do
     
     before(:each) do
@@ -40,10 +48,6 @@ describe Tagging do
       
       it "should check for uniqueness violation consrtaint on Tag creation" do
         pending("Just in case race conditions become possible")
-      end
-      
-      it "should prevents multiple copies of same taggings within user and taggable scope" do
-        pending()
       end
     
     end
