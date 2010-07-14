@@ -3,19 +3,13 @@
 <h2>Listing requests</h2>
 
 <table>
-  <tr>
-    <th>Requirements</th>
-    <th>Posted by</th>
-  </tr>
 
 <% @requests.each do |request| %>
-  <tr>
-    <td><%= link_to request.requirements, user_request_path(request.user, request) %></td>
-    <td><%= request.user.nickname %></td>
+<p><%= link_to request.requirements, user_request_path(request.user, request) %>
+    by <%= request.user.nickname %><br />
+    <%= "#{request.resources.size} responses" if request.resources.size > 0 %> </p>
 
-  </tr>
 <% end %>
-</table>
 
 <br />
 

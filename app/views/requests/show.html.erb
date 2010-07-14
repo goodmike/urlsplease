@@ -13,7 +13,7 @@
 
 <p><b>Tags:</b></p>
 
-<p><%= @request.tags.collect(&:contents).join(', ') %></p>
+<p><%=raw( @request.tags.collect do |tag| link_to(tag.contents, tag_path(tag)) end.join(', ') ) %></p>
 
 <p><b>Resources posted in response:</b></p>
 

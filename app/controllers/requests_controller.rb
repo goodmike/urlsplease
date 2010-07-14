@@ -11,9 +11,9 @@ class RequestsController < ApplicationController
   def index
     if params[:user_id]
       @user = User.find(params[:user_id])
-      @requests = @user.requests
+      @requests = @user.requests.sort {|a,b| b.resources.size <=> a.resources.size }
     else
-      @requests = Request.all
+      @requests = Request.all.sort {|a,b| b.resources.size <=> a.resources.size }
     end
     respond_to do |format|
       format.html # index.html.erb
