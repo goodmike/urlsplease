@@ -2,11 +2,16 @@
 
 <h2>Welcome to URLs Please</h2>
 
+<% unless user_signed_in? -%>
 <h3>Sign up</h3>
 <p>It's very simple: just <%= link_to "gimme a nickname and valid email address", new_user_registration_path %> I won't share or use to send you spam. That's it for the personal information. No market segmentation necessary: we're all friends here.</p>
+<% end %>
 
 <h3>Post a request</h3>
-<p>Wish someone had written a good blog post or made a screencast or podcast about a topic dear to your heart? <%= link_to "Just ask for it", new_request_path %>. This is your opportunity to ask the world to make it so.</p> 
+<p>Wish someone had written a good blog post or made a screencast or podcast about a topic dear to your heart? 
+<%= user_signed_in? ? 
+  link_to("Just ask for it", new_user_request_path(current_user)) : 
+  "Just ask for it" %>. This is your opportunity to ask the world to make it so.</p> 
 
 <h3>Or, prepare and submit a response</h3>
 <p>Are you a blogger or other content creator? Do you fancy yourself an expert on some topic? Looking for something to write or record about? <%= link_to "Find ideas here", requests_path %> and make something you know someone wants. Then post the URL. You own your content and share the link.</p>
