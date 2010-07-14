@@ -8,11 +8,9 @@ describe "tags/new.html.erb" do
     ))
   end
 
-  it "renders new tag form" do
+  it "does not render new tag form" do
     render
 
-    rendered.should have_selector("form", :action => tags_path, :method => "post") do |form|
-      form.should have_selector("input#tag_contents", :name => "tag[contents]")
-    end
+    rendered.should_not have_selector("form", :action => tags_path, :method => "post")
   end
 end

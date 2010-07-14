@@ -28,6 +28,7 @@
 <p><b>Post a resource:</b></p>
 <%= form_for @resource, :url => user_request_resources_path(current_user, @request) do |r| %>
   <%= r.text_area :url, :cols => 80, :rows => 3 %>
+  <br clear="all" />
   <%= submit_tag 'Create' %>
 <% end %>
 <%= link_to 'Back', requests_path %>
