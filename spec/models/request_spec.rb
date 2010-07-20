@@ -83,13 +83,4 @@ describe Request do
     @req.tags.size.should ==(3)
   end
   
-  it "can provide an excerpt string of a given number of characters from its requirements" do
-    @req = new_request(:requirements => "This is a request of more than 80 characters. The excerpt should cut it off with ellipses before the 100 character mark.")
-    @req.excerpt(80).should ==("This is a request of more than 80 characters. The excerpt should cut it off...")
-  end
-    
-  it "defaults to an excerpt string 100 characters long" do
-    @req = new_request(:requirements => "This is a request of more than 100 characters. The excerpt should cut it off with ellipses before the 80 character mark.")
-    @req.excerpt.should ==("This is a request of more than 100 characters. The excerpt should cut it off with ellipses before...")
-  end   
 end
