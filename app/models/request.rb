@@ -37,10 +37,15 @@ class Request < ActiveRecord::Base
     requirements[0,pos] + "..."
   end
   
-  def self.find_by_tag(contents)
+  def self.find_by_tag(srch)
+    if srch.is_a? Enumerable 
+      contents = srch.collect { |item| Tag.taggify(item) }
+    else
+      contents = Tag.taggify(srch)
+    end 
     Request.joins(:taggings).where(
       :taggings => {:id => Tagging.joins(:tag).where(
-        :tags => {:contents  => Tag.taggify(contents)})})
+        :tags => {:contents  => contents})})
   end
   
 end

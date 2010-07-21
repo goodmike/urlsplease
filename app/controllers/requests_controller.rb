@@ -6,7 +6,7 @@ class RequestsController < ApplicationController
   
   before_filter :authenticate_user!
   before_filter :get_user_by_userid,     :only   => [:index]
-  before_filter :require_user_by_userid, :except => [:index]
+  before_filter :require_user_by_userid, :except => [:index, :tag_search]
   
 
   def index
@@ -86,6 +86,12 @@ class RequestsController < ApplicationController
 
   def destroy
     render(:status => "501") # destroy not permitted
+  end
+  
+  
+  def tag_search
+    @search_tags = params[:search_string].split(/\+|\,/)
+    @requests = Request.find_by_tag(@search_tags)
   end
   
 end

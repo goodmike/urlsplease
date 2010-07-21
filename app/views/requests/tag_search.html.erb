@@ -1,19 +1,22 @@
 <% content_for :title do "Requests" end %>
 
-<h2>Listing requests</h2>
+<h2>Requests matching tags</h2>
+
+<p><b>Searched for:</b> <%= @search_tags.join(', ') %></p>
 
 <table>
 
 <% @requests.each do |request| %>
 <p><%= link_to request.excerpt, user_request_path(request.user, request) %>
-    by <%= request.user.nickname %><br />
+    by: <%= request.user.nickname %><br />
+    tags: <%= raw( request.tags.collect do |tag| link_to(tag.contents, tag_path(tag)) end.join(', ') ) %><br />
     <%= "#{request.resources.size} responses" if request.resources.size > 0 %> </p>
 
 <% end %>
 
 <br />
 
-<h2>Search by tag</h2>
+<h2>Search again</h2>
 
 <%= form_tag requests_tagged_path %>
 
@@ -27,5 +30,5 @@
 <br />
 <br />
 
-
+<%= link_to 'Back', requests_path %> |
 <%= link_to 'New Request', new_user_request_path(current_user) %>

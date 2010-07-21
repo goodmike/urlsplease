@@ -343,4 +343,32 @@ describe RequestsController do
       response.code.should ==("501")
     end
   end
+  
+  
+  describe "tag_search" do
+    
+    before(:each) do
+      Request.stub(:find_by_tag) { [mock_request] }
+    end
+    
+    it "splits search string on + sign and pass collection to Request's tag search method" do
+      Request.should_receive(:find_by_tag).with(["one","two"])
+      get :tag_search, :search_string => "one+two"
+    end
+    
+    it "splits search string on commas and pass collection to Request's tag search method" do
+      Request.should_receive(:find_by_tag).with(["one","two"])
+      get :tag_search, :search_string => "one,two"
+    end
+    
+    it "assigns tag strings to search_tags collection" do
+      get :tag_search, :search_string => "one+two"
+      assigns[:search_tags].should ==( ["one","two"] )
+    end
+    
+    it "assigns found requests to requests collection" do
+      get :tag_search, :search_string => "one+two"
+      assigns[:requests].should ==( [mock_request] )
+    end
+  end
 end

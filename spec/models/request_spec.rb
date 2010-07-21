@@ -117,5 +117,24 @@ describe Request do
       Request.find_by_tag("purple;bunny")
       Request.find_by_tag(" purple bunny\t")
     end
+    
+    describe "when multiple tag content strings are specified" do
+      
+      before(:each) do
+        Tag.stub(:taggify).with("Purple").and_return("purple")
+        Tag.stub(:taggify).with("bunnies").and_return("bunny")
+      end
+    
+      it "converts each string into tag contents format" do
+        Tag.should_receive(:taggify).with("Purple").once().and_return("purple")
+        Tag.should_receive(:taggify).with("bunnies").once().and_return("bunny")
+        Request.find_by_tag(["Purple","bunnies"])
+      end
+      
+      it "passes multiple contents to search" do
+        @taggings.should_receive(:where).with(:tags => {:contents => ["purple","bunny"]}) { @taggings }
+        Request.find_by_tag(["Purple","bunnies"])
+      end
+    end
   end
 end

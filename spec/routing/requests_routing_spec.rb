@@ -30,6 +30,11 @@ describe RequestsController do
     it "recognizes and generates #destroy" do
       { :delete => "/requests/1" }.should route_to(:controller => "requests", :action => "destroy", :id => "1") 
     end
+    
+    it "recognizes and generates #tag_search" do
+      { :get => "requests/tagged/one+two" }.should route_to(
+        :controller => "requests", :action => "tag_search", :search_string => "one+two")
+    end
 
   end
   

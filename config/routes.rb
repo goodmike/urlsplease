@@ -2,6 +2,9 @@ Urlsplease::Application.routes.draw do |map|
 
   resources :tags
 
+  match 'requests/tagged/:search_string' => 'requests#tag_search' # For GET
+  match 'requests/tagged/', :to => 'requests#tag_search'          # For POST
+  
   resources :resources   
 
   resources :requests
