@@ -83,4 +83,50 @@ describe Request do
     @req.tags.size.should ==(3)
   end
   
+  describe "finding by tag search" do
+    
+    def mock_tag(stubs={})
+      @mock_tag ||= mock_model(Tag, stubs)
+    end
+    
+    before(:each) do
+      
+      @taggings = []
+      @requests = [mock_model(Request)]
+      
+      # Request.joins(:taggings) .where(
+      #   :taggings => {:id => Tagging.joins(:tag).where(
+      #     :tags => {:contents  => Tag.taggify(contents)}
+      #   )}
+      # )
+      Request.stub(:joins) { @requests }
+      @requests.stub(:where) { @requests }
+      Tagging.stub(:joins) { @taggings }
+      @taggings.stub(:where) { @taggings }
+      
+      Tag.stub(:taggify) { "purple bunny" }
+    end
+    
+    it "finds tag recrods for contents provided" do
+      Request.should_receive(:joins).with(:taggings).and_return(@requests)
+      Request.find_by_tag("tagcontent")
+    end
+    
+    it "converts search string into tag contents format" do
+      Tag.should_receive(:taggify).and_return("purple bunny")
+      Request.find_by_tag("purple bunnies")
+      Request.find_by_tag("Purple Bunny")
+      Request.find_by_tag("purple_bunny")
+      Request.find_by_tag("purpleBunny")
+      Request.find_by_tag("purple&@#\$%^} bunny!!!")
+      Request.find_by_tag("purple;bunny")
+      Request.find_by_tag(" purple bunny\t")
+    end
+    
+    it "should description" do
+      
+    end
+  end
+  
+  
 end

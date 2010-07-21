@@ -10,9 +10,13 @@ class Tag < ActiveRecord::Base
   
   def initialize(opts={})
     super
-    self.contents = contents.gsub(/[^\w\d_\-\.; ]/,'').
-                             gsub(/[\.;]/,' ').
-                             strip.underscore.humanize.downcase.singularize if contents
+    self.contents = Tag.taggify(contents) if contents
+  end
+  
+  def self.taggify(str)
+    str.gsub(/[^\w\d_\-\.; ]/,'').
+        gsub(/[\.;]/,' ').
+        strip.underscore.humanize.downcase.singularize
   end
   
 end

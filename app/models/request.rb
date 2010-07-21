@@ -36,4 +36,11 @@ class Request < ActiveRecord::Base
     end
     requirements[0,pos] + "..."
   end
+  
+  def self.find_by_tag(contents)
+    Request.joins(:taggings).where(
+      :taggings => {:id => Tagging.joins(:tag).where(
+        :tags => {:contents  => Tag.taggify(contents)})})
+  end
+  
 end
