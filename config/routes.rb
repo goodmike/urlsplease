@@ -1,7 +1,4 @@
 Urlsplease::Application.routes.draw do |map|
-  get "tags/index"
-
-  get "tags/show"
 
   resources :tags
 

@@ -51,5 +51,9 @@ describe Tag do
     tag.taggings.find_requests.should ==(expected_array)
   end
   
+  it "uses contents as to-param value" do
+    t = Tag.new(:contents => "bunny")
+    t.to_param.should ==("bunny")
+  end
   
 end

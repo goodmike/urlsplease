@@ -8,11 +8,9 @@ describe "tags/edit.html.erb" do
     ))
   end
 
-  it "renders the edit tag form" do
+  it "does not render an edit tag form" do
     render
 
-    rendered.should have_selector("form", :action => tag_path(@tag), :method => "post") do |form|
-      form.should have_selector("input#tag_contents", :name => "tag[contents]")
-    end
+    rendered.should_not have_selector("form", :action => tag_path(@tag), :method => "post") 
   end
 end

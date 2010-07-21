@@ -5,12 +5,12 @@ class RequestsController < ApplicationController
        :add_headers => {'Allow' => 'DELETE'}
   
   before_filter :authenticate_user!
+  before_filter :get_user_by_userid,     :only   => [:index]
+  before_filter :require_user_by_userid, :except => [:index]
   
-  # GET /requests
-  # GET /requests.xml
+
   def index
-    if params[:user_id]
-      @user = User.find(params[:user_id])
+    if @user
       @requests = @user.requests.sort {|a,b| b.resources.size <=> a.resources.size }
     else
       @requests = Request.all.sort {|a,b| b.resources.size <=> a.resources.size }
@@ -21,11 +21,8 @@ class RequestsController < ApplicationController
     end
   end
 
-  # GET /requests/1
-  # GET /requests/1.xml
+
   def show
-    return render_404 unless params[:user_id]
-    @user      = User.find(params[:user_id])
     @request   = @user.requests.find(params[:id])
     @resources = @request.resources
     @resource  = @resources.build() # For quick-response form
@@ -37,11 +34,8 @@ class RequestsController < ApplicationController
     end
   end
 
-  # GET /requests/new
-  # GET /requests/new.xml
+
   def new
-    return render_404 unless params[:user_id]
-    @user = User.find(params[:user_id])
     return render_404 unless current_user == @user
     @request = @user.requests.build()
 
@@ -51,19 +45,14 @@ class RequestsController < ApplicationController
     end
   end
 
-  # GET /requests/1/edit
+
   def edit
-    return render_404 unless params[:user_id]
-    @user = User.find(params[:user_id])
     return render_404 unless current_user == @user
     @request = @user.requests.find(params[:id])
   end
 
-  # POST /requests
-  # POST /requests.xml
+
   def create
-    return render_404 unless params[:user_id]
-    @user = User.find(params[:user_id])
     return render_404 unless current_user == @user
     @request = @user.requests.build(params[:request])
 
@@ -78,11 +67,8 @@ class RequestsController < ApplicationController
     end
   end
 
-  # PUT /requests/1
-  # PUT /requests/1.xml
+
   def update
-    return render_404 unless params[:user_id]
-    @user = User.find(params[:user_id])
     return render_404 unless current_user == @user
     @request = @user.requests.find(params[:id])
 
@@ -97,9 +83,9 @@ class RequestsController < ApplicationController
     end
   end
 
-  # DELETE /requests/1
-  # DELETE /requests/1.xml
+
   def destroy
     render(:status => "501") # destroy not permitted
   end
+  
 end

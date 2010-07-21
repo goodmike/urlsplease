@@ -19,4 +19,8 @@ class Tag < ActiveRecord::Base
         strip.underscore.humanize.downcase.singularize
   end
   
+  def to_param
+    contents
+  end
+  
 end

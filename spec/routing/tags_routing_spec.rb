@@ -12,11 +12,11 @@ describe TagsController do
     end
 
     it "recognizes and generates #show" do
-      { :get => "/tags/1" }.should route_to(:controller => "tags", :action => "show", :id => "1")
+      { :get => "/tags/foo" }.should route_to(:controller => "tags", :action => "show", :id => "foo")
     end
 
     it "recognizes and generates #edit" do
-      { :get => "/tags/1/edit" }.should route_to(:controller => "tags", :action => "edit", :id => "1")
+      { :get => "/tags/foo/edit" }.should route_to(:controller => "tags", :action => "edit", :id => "foo")
     end
 
     it "recognizes and generates #create" do
@@ -24,11 +24,11 @@ describe TagsController do
     end
 
     it "recognizes and generates #update" do
-      { :put => "/tags/1" }.should route_to(:controller => "tags", :action => "update", :id => "1") 
+      { :put => "/tags/foo" }.should route_to(:controller => "tags", :action => "update", :id => "foo") 
     end
 
     it "recognizes and generates #destroy" do
-      { :delete => "/tags/1" }.should route_to(:controller => "tags", :action => "destroy", :id => "1") 
+      { :delete => "/tags/foo" }.should route_to(:controller => "tags", :action => "destroy", :id => "foo") 
     end
 
   end

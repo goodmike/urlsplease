@@ -94,11 +94,6 @@ describe Request do
       @taggings = []
       @requests = [mock_model(Request)]
       
-      # Request.joins(:taggings) .where(
-      #   :taggings => {:id => Tagging.joins(:tag).where(
-      #     :tags => {:contents  => Tag.taggify(contents)}
-      #   )}
-      # )
       Request.stub(:joins) { @requests }
       @requests.stub(:where) { @requests }
       Tagging.stub(:joins) { @taggings }
@@ -113,7 +108,7 @@ describe Request do
     end
     
     it "converts search string into tag contents format" do
-      Tag.should_receive(:taggify).and_return("purple bunny")
+      Tag.should_receive(:taggify).exactly(7).times.and_return("purple bunny")
       Request.find_by_tag("purple bunnies")
       Request.find_by_tag("Purple Bunny")
       Request.find_by_tag("purple_bunny")
@@ -122,11 +117,5 @@ describe Request do
       Request.find_by_tag("purple;bunny")
       Request.find_by_tag(" purple bunny\t")
     end
-    
-    it "should description" do
-      
-    end
   end
-  
-  
 end

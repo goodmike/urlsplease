@@ -49,6 +49,11 @@ describe User do
     User.new(valid_attributes("2").with(:email => "email@domain.tld")).should_not be_valid
   end
   
+  it "uses the user's nickname as to-param value" do
+    u = User.new(valid_attributes.with(:nickname => "paramablenickname"))
+    u.to_param.should ==("paramablenickname")
+  end
+  
   
   
 end

@@ -4,7 +4,7 @@ class TagsController < ApplicationController
   end
 
   def show
-    @tag = Tag.find(params[:id])
+    @tag = Tag.where(:contents => params[:id]).first
     @requests = @tag.taggings.find_requests
   end
 

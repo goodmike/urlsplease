@@ -15,4 +15,9 @@ class User < ActiveRecord::Base
   attr_accessible :nickname, :email, :password, :password_confirmation
   
   validates :password_confirmation, :presence => true
+  
+  def to_param
+    nickname
+  end
+  
 end

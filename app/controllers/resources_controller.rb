@@ -1,9 +1,11 @@
 class ResourcesController < ApplicationController
-  # GET /resources
-  # GET /resources.xml
+
+  before_filter :get_user_by_userid,           :only   => [:index]
+  before_filter :require_user_by_userid,       :except => [:index]
+  before_filter :require_request_by_requestid, :only => [:new, :edit, :create]
+
   def index
-    if params[:user_id]
-      @user = User.find(params[:user_id])
+    if @user
       @resources = @user.resources
     else
       @resources = Resource.all
@@ -15,11 +17,8 @@ class ResourcesController < ApplicationController
     end
   end
 
-  # GET /resources/1
-  # GET /resources/1.xml
+
   def show
-    return render_404 unless params[:user_id]
-    @user = User.find(params[:user_id])
     @resource = @user.resources.find(params[:id])
 
     respond_to do |format|
@@ -28,13 +27,9 @@ class ResourcesController < ApplicationController
     end
   end
 
-  # GET /resources/new
-  # GET /resources/new.xml
+
   def new
-    return render_404 unless params[:user_id] && params[:request_id]
-    @user = User.find(params[:user_id])
     return render_404 unless current_user == @user
-    @request = Request.find(params[:request_id])
     @resource = @request.resources.build
     @resource.user = @user
 
@@ -44,22 +39,15 @@ class ResourcesController < ApplicationController
     end
   end
 
-  # GET /resources/1/edit
+
   def edit
-    return render_404 unless params[:user_id] && params[:request_id]
-    @user = User.find(params[:user_id])
     return render_404 unless current_user == @user
-    @request = Request.find(params[:request_id])
     @resource = @request.resources.find(params[:id])
   end
 
-  # POST /resources
-  # POST /resources.xml
+
   def create
-    return render_404 unless params[:user_id] && params[:request_id]
-    @user = User.find(params[:user_id])
     return render_404 unless current_user == @user
-    @request = Request.find(params[:request_id])
     @resource = @request.resources.build(params[:resource])
     @resource.user = @user
 
@@ -75,18 +63,15 @@ class ResourcesController < ApplicationController
     end
   end
 
-  # PUT /resources/1
-  # PUT /resources/1.xml
+
   def update
     render(:status => "501") # No updates permitted.
   end
 
-  # DELETE /resources/1
-  # DELETE /resources/1.xml
+
   def destroy
-    return render_404 unless params[:user_id] && params[:request_id]
-    @user = User.find(params[:user_id])
     return render_404 unless current_user == @user
+    return render_404 unless params[:request_id]
     @request = @user.requests.find(params[:request_id])
     
     @resource = @request.resources.find(params[:id])
