@@ -1,0 +1,34 @@
+<% content_for :title do "User #{@user.nickname}" end %>
+
+<h2>Public information for user <%= @user.nickname %></h2>
+
+<p>Member since <%= dateonly(@user) %></p>
+
+<h3>Requests made</h3>
+
+<% @requests.each do |request| %>
+<p><%= link_to request.excerpt, user_request_path(request.user, request) %>
+    <% if request.resources.size > 0 -%>
+    <br />
+    <%= request.resources.size %> responses as of  <%= dateandtime(request.resources.first) %>
+    <% end -%></p>
+<% end %>
+
+<h3>Resources posted</h3>
+<% @resources.each do |resource| %>
+<p><%= link_to resource.url, resource.url %><br />
+Posted: <%= dateandtime(resource) %><br />
+In response to:<br />
+<% request = resource.request %>
+<%= link_to request.excerpt, user_request_path(request.user, request) %> 
+by <%= resource.user.nickname %><br />
+</p>
+<% end %>
+
+<h3>Tags followed</h3>
+<%=raw( @tags.collect do |tag| link_to(tag.contents, tag_path(tag)) end.join(', ') ) %>
+<br />
+<br />
+
+
+<%= link_to 'Back to requests', requests_path %>

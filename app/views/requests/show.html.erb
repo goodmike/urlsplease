@@ -8,7 +8,7 @@
 
 <p>
   <b>Posted by:</b>
-  <%= @request.user.nickname %>
+  <%= link_to @request.user.nickname, @request.user %>
 </p>
 
 <p><b>Tags:</b></p>
@@ -20,7 +20,7 @@
 <ul>
 <% @resources.each do |r| %>
 <% unless r.new_record? %>
-  <li><%= link_to r.url, r.url %> by <%= r.user.nickname %></li>
+  <li><%= link_to r.url, r.url %> by <%= link_to r.user.nickname, r.user %></li>
   <% end %>
 <% end %>
 </ul>
