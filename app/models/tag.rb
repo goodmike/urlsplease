@@ -14,9 +14,13 @@ class Tag < ActiveRecord::Base
   end
   
   def self.taggify(str)
-    str.gsub(/[^\w\d_\-\.; ]/,'').
+    str.gsub(/[^\w\d_\&\-\.; ]/,'').
         gsub(/[\.;]/,' ').
-        strip.underscore.humanize.downcase.singularize
+        strip.underscore.humanize.downcase.gsub(/ /,'-')
+  end
+  
+  def self.split(str)
+    str.gsub(/[,+]/,' ').split(/\s+/)
   end
   
   def to_param

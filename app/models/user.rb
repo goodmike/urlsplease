@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
 
+  include Taggable
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
   devise :database_authenticatable, :registerable,
@@ -18,6 +20,12 @@ class User < ActiveRecord::Base
   
   def to_param
     nickname
+  end
+  
+# User-specific customizations to Taggable
+
+  def user
+    self
   end
   
 end

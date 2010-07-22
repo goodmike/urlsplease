@@ -23,8 +23,8 @@
   </div>
   
   <div class="field">
-    <%= f.label :new_tags %> (separated by commas)<br />
-    <%= f.text_area :new_tags, :cols=>80, :rows=>4 %>
+    <%= f.label :new_tags %> (separate with spaces or commas)<br />
+    <%= f.text_field :new_tags, :size => 88 %>
   </div>
   <div class="actions">
     <%= f.submit %>

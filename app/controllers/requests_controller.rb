@@ -90,7 +90,7 @@ class RequestsController < ApplicationController
   
   
   def tag_search
-    @search_tags = params[:search_string].split(/\+|\,/)
+    @search_tags = Tag.split(params[:search_string])
     @requests = Request.find_by_tag(@search_tags)
   end
   

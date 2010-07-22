@@ -11,9 +11,9 @@ describe Tag do
     lambda { Tag.create!(:contents => "bunnies") }.should raise_error
   end
   
-  it "singularizes its contents string on initialization" do
+  it "does not singularize its contents string on initialization" do
     t = Tag.new(:contents => "bunnies")
-    t.contents.should ==("bunny")
+    t.contents.should ==("bunnies")
   end
   
   it "downcases its content string" do
@@ -21,29 +21,29 @@ describe Tag do
     t.contents.should ==("bunny")
   end
   
-  it "converts underscores in contents into spaces" do
-    t = Tag.new(:contents => "purple_bunny")
-    t.contents.should ==("purple bunny")
-  end
-  
-  it "converts camelcase contents into space-separated string" do
+  it "converts camelcase contents into hyphen-separated string" do
     t = Tag.new(:contents => "purpleBunny")
-    t.contents.should ==("purple bunny")
+    t.contents.should ==("purple-bunny")
   end
   
   it "strips away any punctuation" do
-    t = Tag.new(:contents => "33&@#\$%^}bunny!!!")
+    t = Tag.new(:contents => "33!?@#\$%^}bunny!!!")
     t.contents.should ==("33bunny")
   end
   
-  it "converts periods and semicolons into spaces" do
-    t = Tag.new(:contents => "1.blue;bunny")
-    t.contents.should ==("1 blue bunny")
+  it "converts underscores, periods and semicolons into hypens" do
+    t = Tag.new(:contents => "1.cool_blue;bunny")
+    t.contents.should ==("1-cool-blue-bunny")
+  end
+  
+  it "keeps ampersands in contents" do
+    t = Tag.new(:contents => "bunnies&dragons")
+    t.contents.should ==("bunnies&dragons")
   end
     
   it "removes preceding and trailing whitespace" do
-    t = Tag.new(:contents => " 1 bunny\t")
-    t.contents.should ==("1 bunny")
+    t = Tag.new(:contents => " bunny\t")
+    t.contents.should ==("bunny")
   end
   
   it "return all tagged requests in reverse chronological order" do
@@ -56,4 +56,11 @@ describe Tag do
     t.to_param.should ==("bunny")
   end
   
+  describe "providing a class method for breaking strings into tag-ready contents" do
+    
+    it "split on commas, whitepace, and plus signs" do
+      Tag.split("one,two, three four+five+six").should ==(["one","two","three","four","five","six"])
+    end
+    
+  end
 end

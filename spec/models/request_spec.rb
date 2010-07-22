@@ -40,6 +40,9 @@ describe Request do
     r.should_not be_valid
   end
   
+
+# Extractable to 'Taggable' behavior  
+  
   describe "providing convenience method for tagging" do
     
     before(:each) do
@@ -48,14 +51,15 @@ describe Request do
     end
     
     it "accepts a user for author and string for tag contents" do
-      @req.tag(mock_user,"three, little, pigs")
+      @req.tag(mock_user,"three, little pigs")
     end
     
-    it "creates taggings for each comma-separated value in the contents string" do
-      @req.tag(mock_user,"three, little, pigs")
-      @req.taggings.size.should ==(3)
+    it "uses Tag's split method to split up tag string" do
+      Tag.should_receive(:split).with("three, little pigs") {["three" "little" "pigs"]}
+      @req.tag(mock_user,"three, little pigs")
     end
   end
+  
   
   describe "when saved with 'new_tags' attribute" do
     
@@ -94,6 +98,7 @@ describe Request do
       @taggings = []
       @requests = [mock_model(Request)]
       
+      # Smelly mocking for arel associations
       Request.stub(:joins) { @requests }
       @requests.stub(:where) { @requests }
       Tagging.stub(:joins) { @taggings }
@@ -108,31 +113,25 @@ describe Request do
     end
     
     it "converts search string into tag contents format" do
-      Tag.should_receive(:taggify).exactly(7).times.and_return("purple bunny")
-      Request.find_by_tag("purple bunnies")
+      Tag.should_receive(:taggify).and_return("purple bunny")
       Request.find_by_tag("Purple Bunny")
-      Request.find_by_tag("purple_bunny")
-      Request.find_by_tag("purpleBunny")
-      Request.find_by_tag("purple&@#\$%^} bunny!!!")
-      Request.find_by_tag("purple;bunny")
-      Request.find_by_tag(" purple bunny\t")
     end
     
     describe "when multiple tag content strings are specified" do
       
       before(:each) do
         Tag.stub(:taggify).with("Purple").and_return("purple")
-        Tag.stub(:taggify).with("bunnies").and_return("bunny")
+        Tag.stub(:taggify).with("bunnies").and_return("bunnies")
       end
     
       it "converts each string into tag contents format" do
         Tag.should_receive(:taggify).with("Purple").once().and_return("purple")
-        Tag.should_receive(:taggify).with("bunnies").once().and_return("bunny")
+        Tag.should_receive(:taggify).with("bunnies").once().and_return("bunnies")
         Request.find_by_tag(["Purple","bunnies"])
       end
       
       it "passes multiple contents to search" do
-        @taggings.should_receive(:where).with(:tags => {:contents => ["purple","bunny"]}) { @taggings }
+        @taggings.should_receive(:where).with(:tags => {:contents => ["purple","bunnies"]}) { @taggings }
         Request.find_by_tag(["Purple","bunnies"])
       end
     end

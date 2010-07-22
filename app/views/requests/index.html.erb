@@ -18,8 +18,8 @@
 <%= form_tag requests_tagged_path %>
 
 <p>
-  <%= label_tag 'search_string', 'Tags to search for' %> (separate with commas)<br>
-  <%= text_field_tag 'search_string' %>
+  <%= label_tag 'search_string', 'Tags to search for' %> (separate with spaces or commas)<br>
+  <%= text_field_tag 'search_string', '', :size => 30 %>
 </p>
 <%= submit_tag("Search") %>
 </form>

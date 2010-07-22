@@ -54,6 +54,94 @@ describe User do
     u.to_param.should ==("paramablenickname")
   end
   
+# Extractable for taggable behavior 
   
+  describe "providing convenience method for tagging" do
+    
+    before(:each) do
+      @user = User.create(valid_attributes)
+    end
+    
+    it "accepts a user for author and string for tag contents" do
+      @user.tag(@user,"three, little pigs")
+    end
+    
+    it "uses Tag's split method to split up tag string" do
+      Tag.should_receive(:split).with("three, little pigs") {["three" "little" "pigs"]}
+      @user.tag(@user,"three, little pigs")
+    end
+  end
+  
+  describe "when saved with 'new_tags' attribute" do
+    
+    before(:each) do
+      @user = User.create(valid_attributes.with(:new_tags => "two, tags"))
+    end
+    
+    it "creates new records for taggings" do
+      @user.taggings.size.should ==(2)
+    end
+    
+    it "still saves request record when duplicate tagging is discovered" do
+      @user.new_tags = "two, more"
+      assert @user.save
+    end
+  end
+  
+  it "returns tags from its taggings in response to :tags" do
+    @user = User.create(valid_attributes)
+    @user.tag(@user,"three, little, pigs")
+    @user.tags.size.should ==(3)
+  end
+  
+  describe "finding by tag search" do
+    
+    def mock_tag(stubs={})
+      @mock_tag ||= mock_model(Tag, stubs)
+    end
+    
+    before(:each) do
+      
+      @taggings = []
+      @users = [mock_model(User)]
+      
+      # Smelly mocking for arel associations
+      User.stub(:joins) { @users }
+      @users.stub(:where) { @users }
+      Tagging.stub(:joins) { @taggings }
+      @taggings.stub(:where) { @taggings }
+      
+      Tag.stub(:taggify) { "purple bunny" }
+    end
+  
+    it "finds tag recrods for contents provided" do
+      User.should_receive(:joins).with(:taggings).and_return(@users)
+      User.find_by_tag("tagcontent")
+    end
+    
+    it "converts search string into tag contents format" do
+      Tag.should_receive(:taggify).and_return("purple bunny")
+      User.find_by_tag("Purple Bunny")
+    end
+    
+    describe "when multiple tag content strings are specified" do
+      
+      before(:each) do
+        Tag.stub(:taggify).with("Purple").and_return("purple")
+        Tag.stub(:taggify).with("bunnies").and_return("bunnies")
+      end
+    
+      it "converts each string into tag contents format" do
+        Tag.should_receive(:taggify).with("Purple").once().and_return("purple")
+        Tag.should_receive(:taggify).with("bunnies").once().and_return("bunnies")
+        User.find_by_tag(["Purple","bunnies"])
+      end
+      
+      it "passes multiple contents to search" do
+        @taggings.should_receive(:where).with(:tags => {:contents => ["purple","bunnies"]}) { @taggings }
+        User.find_by_tag(["Purple","bunnies"])
+      end
+    end
+  end
   
 end
