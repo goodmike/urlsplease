@@ -2,20 +2,22 @@ require 'spec_helper'
 
 describe Request do
   
+  include MockModels
+  
   def valid_attributes(uniq="")
     {
       :requirements => "Request requirements#{uniq}"
     }
   end
   
-  def new_request(attrs={})
+  def new_request(attrs={}, uniq="")
     r = Request.new(valid_attributes.with(attrs))
-    r.user = mock_user
+    r.user = mock_unique_user(uniq)
     r
   end
   
-  def mock_user(uniq="")
-    mock_model(User, :nickname => "Nickname#{uniq}")
+  def mock_unique_user(uniq="")
+    mock_user(:nickname => "Nickname#{uniq}")
   end
   
   it "is valid with all required attributes" do
@@ -87,11 +89,29 @@ describe Request do
     @req.tags.size.should ==(3)
   end
   
-  describe "finding by tag search" do
+  describe "finding by tags" do
     
-    def mock_tag(stubs={})
-      @mock_tag ||= mock_model(Tag, stubs)
+    before(:each) do
+      # Better than crazy mocking, but factory girl would likely be better still
+      @requests = [new_request({:new_tags => "one"}, 1), new_request({:new_tags => "one two"}, 2)]
+      @requests.each &:save
+      @tag1 = Tag.find_by_contents("one")
+      @tag2 = Tag.find_by_contents("two")
     end
+    
+    it "takes single tags or an array of tags as an argument" do
+      Request.find_by_tags(@tag2).should ==(@requests[1..1])
+      Request.find_by_tags([@tag2]).should ==(@requests[1..1])
+    end
+    
+    it "does not return duplicate requests" do
+      Request.find_by_tags([@tag1, @tag2]).should ==(@requests)
+    end
+    
+
+  end
+  
+  describe "finding by tag contents search" do
     
     before(:each) do
       
@@ -109,12 +129,12 @@ describe Request do
     
     it "finds tag recrods for contents provided" do
       Request.should_receive(:joins).with(:taggings).and_return(@requests)
-      Request.find_by_tag("tagcontent")
+      Request.find_by_tag_contents("tagcontent")
     end
     
     it "converts search string into tag contents format" do
       Tag.should_receive(:taggify).and_return("purple bunny")
-      Request.find_by_tag("Purple Bunny")
+      Request.find_by_tag_contents("Purple Bunny")
     end
     
     describe "when multiple tag content strings are specified" do
@@ -127,12 +147,12 @@ describe Request do
       it "converts each string into tag contents format" do
         Tag.should_receive(:taggify).with("Purple").once().and_return("purple")
         Tag.should_receive(:taggify).with("bunnies").once().and_return("bunnies")
-        Request.find_by_tag(["Purple","bunnies"])
+        Request.find_by_tag_contents(["Purple","bunnies"])
       end
       
       it "passes multiple contents to search" do
         @taggings.should_receive(:where).with(:tags => {:contents => ["purple","bunnies"]}) { @taggings }
-        Request.find_by_tag(["Purple","bunnies"])
+        Request.find_by_tag_contents(["Purple","bunnies"])
       end
     end
   end

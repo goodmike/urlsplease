@@ -91,7 +91,7 @@ class RequestsController < ApplicationController
   
   def tag_search
     @search_tags = Tag.split(params[:search_string])
-    @requests = Request.find_by_tag(@search_tags)
+    @requests = Request.find_by_tag_contents(@search_tags)
   end
   
 end

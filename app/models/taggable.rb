@@ -9,8 +9,18 @@ module Taggable
       before_save :tag
     eos
     
+    
     find_by_tags_method = <<-eos
-      def self.find_by_tag(srch)
+      def self.find_by_tags(tags)
+        tags = [tags] unless tags.is_a? Array 
+        self.joins(:taggings).where(
+          :taggings => {:id => Tagging.joins(:tag).where(
+            :tags => {:id => tags.collect(&:id)})}).uniq
+      end
+    eos
+    
+    find_by_tag_contents_method = <<-eos
+      def self.find_by_tag_contents(srch)
         if srch.is_a? Enumerable 
           contents = srch.collect { |item| Tag.taggify(item) }
         else
@@ -24,6 +34,7 @@ module Taggable
     
     taggable.class_eval class_macros
     taggable.class_eval find_by_tags_method
+    taggable.class_eval find_by_tag_contents_method
     
   end
   

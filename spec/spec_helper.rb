@@ -26,6 +26,29 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
 end
 
+
+module MockModels
+
+  def mock_user(stubs={})
+    @mock_user ||= mock_model(User, stubs)
+  end
+  
+  def mock_tag(stubs={})
+    @mock_tag  ||= mock_model(Tag, stubs)
+  end
+  
+  def mock_request(stubs={})
+    @mock_request ||= mock_model(Request, stubs)
+  end
+   
+  def mock_resource(stubs={})
+    @mock_resource ||= mock_model(Resource, stubs)
+  end
+  
+end
+
+
+
 class Hash
 
   ##

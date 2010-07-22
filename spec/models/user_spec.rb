@@ -116,12 +116,12 @@ describe User do
   
     it "finds tag recrods for contents provided" do
       User.should_receive(:joins).with(:taggings).and_return(@users)
-      User.find_by_tag("tagcontent")
+      User.find_by_tag_contents("tagcontent")
     end
     
     it "converts search string into tag contents format" do
       Tag.should_receive(:taggify).and_return("purple bunny")
-      User.find_by_tag("Purple Bunny")
+      User.find_by_tag_contents("Purple Bunny")
     end
     
     describe "when multiple tag content strings are specified" do
@@ -134,12 +134,12 @@ describe User do
       it "converts each string into tag contents format" do
         Tag.should_receive(:taggify).with("Purple").once().and_return("purple")
         Tag.should_receive(:taggify).with("bunnies").once().and_return("bunnies")
-        User.find_by_tag(["Purple","bunnies"])
+        User.find_by_tag_contents(["Purple","bunnies"])
       end
       
       it "passes multiple contents to search" do
         @taggings.should_receive(:where).with(:tags => {:contents => ["purple","bunnies"]}) { @taggings }
-        User.find_by_tag(["Purple","bunnies"])
+        User.find_by_tag_contents(["Purple","bunnies"])
       end
     end
   end
