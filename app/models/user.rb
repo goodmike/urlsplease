@@ -22,6 +22,11 @@ class User < ActiveRecord::Base
     nickname
   end
   
+  def responses
+    Resource.joins(:request).where(
+      :requests => {:id => Request.joins(:user).where(:users => {:id => self})})
+  end
+  
 # User-specific customizations to Taggable
 
   def user

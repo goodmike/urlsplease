@@ -89,9 +89,26 @@ describe User do
   end
   
   it "returns tags from its taggings in response to :tags" do
-    @user = User.create(valid_attributes)
-    @user.tag(@user,"three, little, pigs")
+    @user = User.create(valid_attributes.with(:new_tags =>"three, little, pigs"))
     @user.tags.size.should ==(3)
+  end
+  
+  describe "finding responses" do
+    it "returns the resources posted to the user's requests" do
+      # Replace this with factory methods
+      @user = User.create!(valid_attributes)
+      
+      resource_1 = Resource.new(:url => "http://foo.bar")
+      resource_1.user = @user
+      resource_2 = Resource.new(:url => "http://foo.baz")
+      resource_2.user = @user
+      request_1 = @user.requests.create!(:requirements => "one")
+      request_2 = @user.requests.create!(:requirements => "two")
+      
+      request_1.resources << resource_1
+      request_2.resources << resource_2
+      @user.responses.should include(resource_1,resource_2)
+    end
   end
   
   describe "finding by tag search" do
@@ -108,14 +125,12 @@ describe User do
       # Smelly mocking for arel associations
       User.stub(:joins) { @users }
       @users.stub(:where) { @users }
-      Tagging.stub(:joins) { @taggings }
-      @taggings.stub(:where) { @taggings }
       
       Tag.stub(:taggify) { "purple bunny" }
     end
   
     it "finds tag recrods for contents provided" do
-      User.should_receive(:joins).with(:taggings).and_return(@users)
+      User.should_receive(:joins).with(:tags).and_return(@users)
       User.find_by_tag_contents("tagcontent")
     end
     
@@ -138,7 +153,7 @@ describe User do
       end
       
       it "passes multiple contents to search" do
-        @taggings.should_receive(:where).with(:tags => {:contents => ["purple","bunnies"]}) { @taggings }
+        @users.should_receive(:where).with(:tags => {:contents => ["purple","bunnies"]}) { @users }
         User.find_by_tag_contents(["Purple","bunnies"])
       end
     end

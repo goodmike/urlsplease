@@ -84,8 +84,8 @@ describe Request do
   end
   
   it "returns tags from its taggings in response to :tags" do
-    @req = new_request
-    @req.tag(mock_user,"three, little, pigs")
+    @req = new_request(:new_tags => "three, little, pigs")
+    @req.save
     @req.tags.size.should ==(3)
   end
   
@@ -121,14 +121,12 @@ describe Request do
       # Smelly mocking for arel associations
       Request.stub(:joins) { @requests }
       @requests.stub(:where) { @requests }
-      Tagging.stub(:joins) { @taggings }
-      @taggings.stub(:where) { @taggings }
       
       Tag.stub(:taggify) { "purple bunny" }
     end
     
     it "finds tag recrods for contents provided" do
-      Request.should_receive(:joins).with(:taggings).and_return(@requests)
+      Request.should_receive(:joins).with(:tags).and_return(@requests)
       Request.find_by_tag_contents("tagcontent")
     end
     
@@ -151,7 +149,7 @@ describe Request do
       end
       
       it "passes multiple contents to search" do
-        @taggings.should_receive(:where).with(:tags => {:contents => ["purple","bunnies"]}) { @taggings }
+        @requests.should_receive(:where).with(:tags => {:contents => ["purple","bunnies"]}) { @requests }
         Request.find_by_tag_contents(["Purple","bunnies"])
       end
     end

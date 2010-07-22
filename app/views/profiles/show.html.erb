@@ -1,0 +1,37 @@
+<% content_for :title do "Start page for #{@user.nickname}" end %>
+
+<h2>Your start page</h2>
+
+<h3>Recent responses to your requests:</h3>
+
+<% @responses.each do |response| %>
+<p><%= link_to response.url, response.url %><br />
+  Posted <%= dateandtime(response) %> by <%= response.user.nickname %><br />
+  In response to: 
+  <%= link_to response.request.excerpt, user_request_path(@user, response.request) %>
+<% end %>
+
+<h3>Suggested requests</h3>
+<% @recommended_requests.each do |request| %>
+<p><%= link_to request.excerpt, user_request_path(request.user, request) %><br />
+  Tagged: <%=raw( @request.tags.collect do |tag| link_to(tag.contents, tag_path(tag)) end.join(', ') ) %>
+  <% if request.resources.size > 0 -%>
+    <br />
+    <%= request.resources.size %> responses as of 
+    <%= dateandtime(request.resources.first) %>
+  <% end -%></p>
+<% end %>
+
+<h3>Tags you follow</h3>
+
+<p><%=raw( @tags.collect do |tag| link_to(tag.contents, tag_path(tag)) end.join(', ') ) %>
+<br />
+Add or remove tags</p>
+
+<h3>Your personal information</h3>
+<p><b>Nickname</b>: <%= @user.nickname %><br />
+  <b>Member since</b>: <%= dateonly(@user) %></p>
+
+<h3>Other things you might want to do</h3>
+<p><%= link_to "View all your requests.", user_requests_path(@user) %></p>
+<p><%= link_to "View all the resources you've posted.", user_resources_path(@user) %></p>

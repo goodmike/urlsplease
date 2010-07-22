@@ -4,6 +4,7 @@ module Taggable
     
     class_macros = <<-eos
       has_many :taggings, :as => :taggable
+      has_many :tags,     :through => :taggings
       attr_accessor   :new_tags
       attr_accessible :new_tags
       before_save :tag
@@ -13,9 +14,8 @@ module Taggable
     find_by_tags_method = <<-eos
       def self.find_by_tags(tags)
         tags = [tags] unless tags.is_a? Array 
-        self.joins(:taggings).where(
-          :taggings => {:id => Tagging.joins(:tag).where(
-            :tags => {:id => tags.collect(&:id)})}).uniq
+        self.joins(:tags).
+             where(:tags => {:id => tags.collect(&:id)}).uniq
       end
     eos
     
@@ -26,9 +26,8 @@ module Taggable
         else
           contents = Tag.taggify(srch)
         end 
-        self.joins(:taggings).where(
-          :taggings => {:id => Tagging.joins(:tag).where(
-            :tags => {:contents  => contents})})
+        self.joins(:tags).
+          where(:tags => {:contents  => contents})
       end
     eos
     
@@ -48,12 +47,4 @@ module Taggable
       end
     end
   end
-  
-  def tags
-    self.taggings.collect &:tag
-  end
-
-  
-
-  
 end
