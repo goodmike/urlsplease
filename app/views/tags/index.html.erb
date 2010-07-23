@@ -1,4 +1,4 @@
 <% content_for :title do  "Recent tags"  end %>
 
 <h2>Recent tags</h2>
-<%= raw @tags.collect { |tag| link_to tag.contents, tag_path(tag) }.join ", "%>
+<%= linked_tags @tags %>

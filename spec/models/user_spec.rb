@@ -159,4 +159,30 @@ describe User do
     end
   end
   
+  describe "handling tag subscriptions" do
+    
+    before(:each) do
+      # Replace this with factory methods
+      @user = User.create!(valid_attributes.with(:new_tags => "duck"))
+      @duck = Tag.find_by_contents("duck")
+      @newt = Tagging.create!(:contents=>"newt", :taggable => @user, :user => mock_model(User))
+      @wood = Tagging.create!(:contents=>"wood", :taggable => mock_model(Request), :user => @user)
+      @user.reload # So all these taggings are included
+    end
+  
+    it "retrieves subscriptions as user-tagged tags which the user authored" do
+      @user.tag_subscriptions.should ==([@duck])
+    end
+
+    it "removes a tagging for a tag subscription given a tag's contents" do
+      @user.unsubscribe_tag(@duck)
+      @user.tag_subscriptions.should ==([])
+    end
+    
+    it "won't remove someone else's tagging of the user" do
+      @user.unsubscribe_tag(Tag.find_by_contents("newt"))
+      @user.tag_subscriptions.should ==([@duck])
+      @user.taggings.should include(@newt)
+    end
+  end
 end

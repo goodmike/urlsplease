@@ -1,4 +1,4 @@
-<% content_for :title do "Start page for #{@user.nickname}" end %>
+<% content_for :title do "Start page for #{user @user}" end %>
 
 <h2>Your start page</h2>
 
@@ -6,7 +6,7 @@
 
 <% @responses.each do |response| %>
 <p><%= link_to response.url, response.url %><br />
-  Posted <%= dateandtime(response) %> by <%= response.user.nickname %><br />
+  Posted <%= dateandtime(response) %> by <%= user response %><br />
   In response to: 
   <%= link_to response.request.excerpt, user_request_path(@user, response.request) %>
 <% end %>
@@ -14,7 +14,7 @@
 <h3>Suggested requests</h3>
 <% @recommended_requests.each do |request| %>
 <p><%= link_to request.excerpt, user_request_path(request.user, request) %><br />
-  Tagged: <%=raw( @request.tags.collect do |tag| link_to(tag.contents, tag_path(tag)) end.join(', ') ) %>
+  Tagged: <%=linked_tags request.tags %>
   <% if request.resources.size > 0 -%>
     <br />
     <%= request.resources.size %> responses as of 
@@ -24,9 +24,9 @@
 
 <h3>Tags you follow</h3>
 
-<p><%=raw( @tags.collect do |tag| link_to(tag.contents, tag_path(tag)) end.join(', ') ) %>
+<p><%= linked_tags @tags %>
 <br />
-Add or remove tags</p>
+<%= link_to "Add or remove tags", user_tag_subscriptions_path(@user) %></p>
 
 <h3>Your personal information</h3>
 <p><b>Nickname</b>: <%= @user.nickname %><br />

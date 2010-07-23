@@ -9,9 +9,9 @@
 
 <p>
   <b>Recent uses:</b>
-  <% @requests.each do |req| %>
-<p><%= link_to req.requirements, user_request_path(req.user, req) %> by 
-   <%= req.user.nickname %></p>
+  <% @requests.each do |request| %>
+<p><%= link_to request.requirements, user_request_path(request.user, request) %> by 
+   <%= user request %></p>
   <% end %>
 
 <%= link_to 'Show all tags', tags_path %> |

@@ -1,5 +1,5 @@
 Urlsplease::Application.routes.draw do |map|
-
+  
   resources :tags
 
   match 'requests/tagged/:search_string' => 'requests#tag_search' # For GET
@@ -16,6 +16,7 @@ Urlsplease::Application.routes.draw do |map|
     resources :requests do       
       resources :resources
     end
+    resources :tag_subscriptions
   end
 
   resources :profiles

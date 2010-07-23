@@ -33,4 +33,15 @@ class User < ActiveRecord::Base
     self
   end
   
+  def tag_subscriptions
+    Tag.joins(:taggings).
+        where(:taggings => {:user_id => self, :taggable_id => self, 
+                                              :taggable_type => self.class.name})
+  end
+  
+  def unsubscribe_tag(tag)
+    tagging = self.taggings.where(:tag_id => tag).first
+    tagging.destroy if tagging && tagging.user == self
+  end
+  
 end

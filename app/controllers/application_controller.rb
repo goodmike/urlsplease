@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
     return render_404 unless params[:request_id]
     @request = Request.find(params[:request_id])
   end
+  
+  def require_current_user_authorizing
+    return render_404 unless current_user == @user
+  end
 
   def get_user_by_userid
     @user = User.where(:nickname => params[:user_id]).first if params[:user_id]

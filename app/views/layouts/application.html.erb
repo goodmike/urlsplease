@@ -1,22 +1,25 @@
 <html>
 <head>
 <title>URLs Please | <%= yield :title %></title>
+  <%= csrf_meta_tag %>
   <link rel="stylesheet" href="/stylesheets/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
   <%= yield :head %>
+  <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js", "jquery-rails.js", "application.js" %>
   <script type="text/javascript" charset="utf-8">
     <%= yield :js %>
   </script>
   <style type="text/css" media="screen">
     <%= yield :css %>
   </style>
+  
 </head>
 <body>
 <div id="body_head">
   <div id="main_nav" style="float:right">    
   <% if user_signed_in? -%>
-    Signed in as <%= current_user.nickname %>. 
+    Signed in as <%= user current_user %>. 
     <%= link_to "Sign out", destroy_user_session_path -%> |
-    <%= link_to "My Requests", user_requests_path(current_user) %><br />
+    <%= link_to "Your start page", profile_path(current_user) %><br />
     <%= link_to "Make a request", new_user_request_path(current_user) %> | 
     <%= link_to "Review requests", requests_path %>
   <% else %>

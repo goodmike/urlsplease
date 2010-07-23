@@ -1,6 +1,6 @@
-<% content_for :title do "User #{@user.nickname}" end %>
+<% content_for :title do "User #{user @user}" end %>
 
-<h2>Public information for user <%= @user.nickname %></h2>
+<h2>Public information for user <%= user @user %></h2>
 
 <p>Member since <%= dateonly(@user) %></p>
 
@@ -21,12 +21,12 @@ Posted: <%= dateandtime(resource) %><br />
 In response to:<br />
 <% request = resource.request %>
 <%= link_to request.excerpt, user_request_path(request.user, request) %> 
-by <%= resource.user.nickname %><br />
+by <%= user resource %><br />
 </p>
 <% end %>
 
 <h3>Tags followed</h3>
-<%=raw( @tags.collect do |tag| link_to(tag.contents, tag_path(tag)) end.join(', ') ) %>
+<%= linked_tags @tags %>
 <br />
 <br />
 

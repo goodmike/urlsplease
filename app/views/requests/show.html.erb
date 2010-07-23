@@ -1,4 +1,4 @@
-<% content_for :title do "Request by #{@request.user.nickname}" end %>
+<% content_for :title do "Request by #{user @request}" end %>
 
 <h2>Request</h2>
 <p>
@@ -8,19 +8,19 @@
 
 <p>
   <b>Posted by:</b>
-  <%= link_to @request.user.nickname, @request.user %>
+  <%= link_to user(@request), @request.user %>
 </p>
 
 <p><b>Tags:</b></p>
 
-<p><%=raw( @request.tags.collect do |tag| link_to(tag.contents, tag_path(tag)) end.join(', ') ) %></p>
+<p><%= linked_tags @request.tags %></p>
 
 <p><b>Resources posted in response:</b></p>
 
 <ul>
 <% @resources.each do |r| %>
 <% unless r.new_record? %>
-  <li><%= link_to r.url, r.url %> by <%= link_to r.user.nickname, r.user %></li>
+  <li><%= link_to r.url, r.url %> by <%= link_to user(r), r.user %></li>
   <% end %>
 <% end %>
 </ul>

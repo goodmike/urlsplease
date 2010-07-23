@@ -8,8 +8,8 @@
 
 <% @requests.each do |request| %>
 <p><%= link_to request.excerpt, user_request_path(request.user, request) %>
-    by: <%= request.user.nickname %><br />
-    tags: <%= raw( request.tags.collect do |tag| link_to(tag.contents, tag_path(tag)) end.join(', ') ) %><br />
+    by: <%= user request %><br />
+    tags: <%= linked_tags request.tags %><br />
     <%= "#{request.resources.size} responses" if request.resources.size > 0 %> </p>
 
 <% end %>

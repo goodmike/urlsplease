@@ -1,0 +1,16 @@
+<% content_for :title do "Tags #{user @user} follows" end %>
+
+<h2>Tags you follow</h2>
+<p>
+<% @tags.each do |tag| -%>
+<b><%= tag.contents %></b> 
+   <%= link_to "Unsubscribe", user_tag_subscription_path(@user, tag), :method => :delete %>
+   <br />
+<% end %>
+<%= form_tag(user_tag_subscriptions_path(@user)) %>
+  <div class="field">
+    <%= label_tag :new_tags %> (separate with spaces or commas)<br />
+    <%= text_field_tag :new_tags, '', :size => 88 %>
+  </div>
+  <%= submit_tag("Add") %>
+</form>

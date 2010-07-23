@@ -12,6 +12,8 @@ require 'spec_helper'
 # end
 describe ApplicationHelper do
   
+  include MockModels
+  
   before(:each) do
     @time = Time.utc(2000,"jan",15,20,15,1)
     @created_object = mock(:created_at => @time)
@@ -50,5 +52,36 @@ describe ApplicationHelper do
     it "returns an error string for display when method can't find a date or time" do
       dateonly(Object.new).should =~(/cannot be parsed/)
     end
-   end
+  end
+  
+  describe "tag listing method" do
+    
+    it "lists comma-separated tag contents, each linked to tag show path" do
+      tags = [mock_model(Tag, :contents => "bunnies", :to_param => "bunnies"),
+               mock_model(Tag, :contents => "bacon", :to_param => "bacon")]
+      linked_tags(tags).should ==('<a href="/tags/bunnies">bunnies</a>, <a href="/tags/bacon">bacon</a>')
+    end
+  end
+  
+  
+  describe "user listing method" do
+    
+    before(:each) do
+      mock_user.stub!(:nickname => "user's nickname")
+    end
+    
+    it "returns nickname of a user" do
+      user(mock_user).should ==("user's nickname")
+    end
+    
+    it "can take any object that has a user attribute" do
+      obj = mock(:user => mock_user)
+      user(obj).should ==("user's nickname")
+    end
+    
+    it "returns an error string for display when method can't find a user" do
+      user(Object.new).should =~(/cannot find/i)
+    end
+  end
+  
 end
