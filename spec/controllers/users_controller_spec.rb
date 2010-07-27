@@ -5,6 +5,10 @@ describe UsersController do
   include Devise::TestHelpers
   include MockModels
    
+   before(:each) do
+     request.env['warden'] = mock_model(Warden, :authenticate => mock_user, :authenticate! => mock_user)
+   end
+   
   describe "GET show" do
     
     before(:each) do

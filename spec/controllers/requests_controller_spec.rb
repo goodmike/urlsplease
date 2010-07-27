@@ -4,17 +4,7 @@ describe RequestsController do
 
   include Devise::TestHelpers
   
-  def mock_resource(stubs={})
-    @mock_resource ||= mock_model(Resource, stubs).as_null_object
-  end
-
-  def mock_request(stubs={})
-    @mock_request ||= mock_model(Request, stubs).as_null_object
-  end
-  
-  def mock_user(stubs={})
-    @mock_user ||= mock_model(User, stubs).as_null_object
-  end
+  include MockModels
   
   before(:each) do
     @requests = []
@@ -221,6 +211,7 @@ describe RequestsController do
       
       describe "with valid params" do
         it "builds a new request from the user's requests collection and assigns it as @request" do
+          mock_request.stub(:save) { true }
           mock_user.should_receive(:requests) { @requests }
           @requests.should_receive(:build).with({'these' => 'params'}) { mock_request }
           post :create, :user_id => "Uwe", :request => {'these' => 'params'}
@@ -238,14 +229,19 @@ describe RequestsController do
       end
 
       describe "with invalid params" do
+        
+        before(:each) do
+          mock_request.stub!(:save) { false }
+        end
+        
         it "assigns a newly created but unsaved request as @request" do
-          @requests.stub(:build) { mock_request(:save => false) }
+          @requests.stub(:build) { mock_request }
           post :create, :user_id => "Uwe", :request => {'these' => 'params'}
           assigns(:request).should be(mock_request)
         end
 
         it "re-renders the 'new' template" do
-          @requests.stub(:build) { mock_request(:save => false) }
+          @requests.stub(:build) { mock_request }
           post :create, :user_id => "Uwe", :request => {'these' => 'params'}
           response.should render_template("new")
         end

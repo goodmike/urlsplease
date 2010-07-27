@@ -2,8 +2,11 @@ require 'spec_helper'
 
 describe TagsController do
 
-  def mock_tag(stubs={})
-    @mock_tag ||= mock_model(Tag, stubs).as_null_object
+  include Devise::TestHelpers
+  include MockModels
+
+  before(:each) do
+    request.env['warden'] = mock_model(Warden, :authenticate => mock_user, :authenticate! => mock_user)
   end
 
   describe "GET index" do

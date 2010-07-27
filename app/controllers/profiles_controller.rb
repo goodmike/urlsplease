@@ -1,5 +1,7 @@
 class ProfilesController < ApplicationController
   
+  before_filter :authenticate_user!
+  
   before_filter :get_user_by_nickname_from_id
   
   def show

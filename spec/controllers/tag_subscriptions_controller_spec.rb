@@ -2,11 +2,13 @@ require 'spec_helper'
 
 describe TagSubscriptionsController do
 
+  include Devise::TestHelpers
   include MockModels
 
   before(:each) do
     User.stub(:where) { [mock_user] }
     controller.stub(:current_user) { mock_user }
+    request.env['warden'] = mock_model(Warden, :authenticate => mock_user, :authenticate! => mock_user)
   end
     
   describe "GET 'index'" do

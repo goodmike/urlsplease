@@ -1,5 +1,7 @@
 class TagSubscriptionsController < ApplicationController
   
+  before_filter :authenticate_user!
+  
   before_filter :require_user_by_userid
   before_filter :require_current_user_authorizing
   

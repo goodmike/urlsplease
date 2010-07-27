@@ -1,5 +1,7 @@
 class ResourcesController < ApplicationController
 
+  before_filter :authenticate_user!
+
   before_filter :get_user_by_userid,           :only   => [:index]
   before_filter :require_user_by_userid,       :except => [:index]
   before_filter :require_request_by_requestid, :only => [:new, :edit, :create]
