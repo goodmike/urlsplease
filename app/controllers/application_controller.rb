@@ -1,5 +1,8 @@
 class ApplicationController < ActionController::Base
+  
   protect_from_forgery
+  
+  before_filter :check_recaptcha_for_devise, :only => :create
   
   private
   
@@ -25,5 +28,27 @@ class ApplicationController < ActionController::Base
   def get_user_by_userid
     @user = User.where(:nickname => params[:user_id]).first if params[:user_id]
   end
+
+  # From http://wiki.github.com/djtek/devise/recaptcha-with-devise-10
+  def check_recaptcha_for_devise
+    # mark Devise Controllers to be excluded from verify_recaptcha
+    except_devise_controllers = [:sessions, :passwords]
+
+    # check if it's a devise_controller? and if marked for verify_recaptcha
+    if devise_controller? && !except_devise_controllers.include?(controller_name.to_sym)
+
+      # build the resource first and then check recaptcha challenge
+      build_resource
+      unless verify_recaptcha()
+
+        # if it fails add the error and render the form back to the client
+        message = 'reCaptcha characters didn\'t match the word verification'
+        resource.errors.add_to_base(message)
+        render_with_scope :new
+      end
+    end
+  end
+
   
 end
+

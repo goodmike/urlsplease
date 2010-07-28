@@ -7,6 +7,8 @@ gem "warden", "0.10.7"
 gem "bcrypt-ruby", "2.1.2", :require => "bcrypt" 
 gem "devise", "1.1.rc2"
 gem "pg"
+gem "recaptcha"
+
 
 group :test do
     gem "rspec-rails", ">= 2.0.0.beta.15"
