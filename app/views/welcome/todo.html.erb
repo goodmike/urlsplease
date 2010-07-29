@@ -6,7 +6,8 @@ ul.retired li {
 }
 <% end %>
 
-<p><b>Current Version: 0.1</b><br />
+<p><b>Current Version: 0.1</b> 
+  (<%= link_to "release notes", welcome_releasenotes_path %>)<br />
   July 28, 2010</p>
 
 <h2>To do</h2>
@@ -15,26 +16,30 @@ ul.retired li {
 <ul>
   <li>Test at high numbers of records.</li>
   <li>Flog: blog posts, twitter, personal emails.</li>
+  <li>Google analytics</li>
 </ul>
 
 <h3>Minor improvements</h3>
 <ul>
   <li>Reverse chronological order for many listings</li>
-  <li>"By importance" or "by relevance" criteria for other listings</li>
   <li>Recommended requests should not include your own</li>
 </ul>
 
 <h3>For version 0.2:</h3>
 <ul>
-  <li>Better interface.</li>
+  <li>Incrementally better interface.</li>
   <li>Some basic branding.</li>
+  <li>Recommending requests by tag should be cumulative: more tag matches, higher position</li>
   <li>Eat my own mustache dog food.</li>
+  <li>Add basic model layer caching.</li>
 </ul>
 
 <h3>For future versions:</h3>
 <ul>
+  <li>Use OpenID only</li>
   <li>Show a preview of request excerpt as a user types.</li>
   <li>Suggest tags as user types</li>
+  
   <li>Token to place in blog post to confirm authorship.</li>
   <li>Tags for resource, user expertise characterization</li>
   <li>Suggest tags for user based on existing subscriptions</li>
@@ -45,7 +50,6 @@ ul.retired li {
   <li>CanSpam, Phishing registry filters on resources</li>
   <li>Search by request contents</li>
   <li>Rate well-formatted and accessible HTML resources higher</li>
-  <li>Use OpenID only</li>
   <li>Anti-robot measures on posting resources and responses, if necessary</li>
   <li>Gravatars for users</li>
 </ul>
@@ -57,26 +61,4 @@ ul.retired li {
   <li>Admin review and/or review requests by user referees (by tag)</li>
   <li>Social network integration: Tweet or FB status update for request, (hashtags too).<br />
       Post popular requests, responses to content aggravators.</li>
-</ul>
-
-<h3>Version 0.1:</h3>
-<ul class="retired">
-  <li>Basic Navigation, Homepage, etc.</li>
-  <li>Nested Resources in Requests, incl. listing and post link on Request page</li>
-  <li>Tags for request characterization</li>
-  <li>Devise for authentication</li>
-  <li>Point URL to heroku app. Zerigo, custom domain.</li>
-  <li>Google apps for email.</li>
-  <li>Add urlsplease github account.</li>
-  <li>Validate resources as URLs</li>
-  <li>Excerpt requests for listing display (100 characters)</li>
-  <li>Pitchier homepage: in search of (free) customers</li>
-  <li>Make Tag use contents instead of numerical ID in RESTful paths</li>
-  <li>Make User use contents instead of numerical ID in RESTful paths</li>
-  <li>Search by tags.</li>
-  <li>Separate tags by whitespace, stop singularizing</li>
-  <li>User tag "subscriptions"</li>
-  <li>User profiles / views with tags to watch, personal requests and responses.</li>
-  <li>Limit controllers' access to authenticated users.</li>
-  <li>reCAPTCHA for account creation.</li>
 </ul>

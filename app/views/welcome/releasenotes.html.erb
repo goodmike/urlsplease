@@ -1,0 +1,33 @@
+<% content_for :title do "Release notes" end %>
+
+<% content_for :css do %>
+ul.retired li {
+  text-decoration: line-through;
+}
+<% end %>
+
+<h2>Release Notes</h2>
+
+<h3>Version 0.1</h3>
+July 28, 2010
+
+<ul>
+  <li>Basic Navigation, Homepage, etc.</li>
+  <li>Nested Resources in Requests, incl. listing and post link on Request page</li>
+  <li>Tags for request characterization</li>
+  <li>Devise for authentication</li>
+  <li>Point URL to heroku app. Zerigo, custom domain.</li>
+  <li>Google apps for email.</li>
+  <li>Add urlsplease github account.</li>
+  <li>Validate resources as URLs</li>
+  <li>Excerpt requests for listing display (100 characters)</li>
+  <li>Pitchier homepage: in search of (free) customers</li>
+  <li>Make Tag use contents instead of numerical ID in RESTful paths</li>
+  <li>Make User use contents instead of numerical ID in RESTful paths</li>
+  <li>Search by tags.</li>
+  <li>Separate tags by whitespace, stop singularizing</li>
+  <li>User tag "subscriptions"</li>
+  <li>User profiles / views with tags to watch, personal requests and responses.</li>
+  <li>Limit controllers' access to authenticated users.</li>
+  <li>reCAPTCHA for account creation.</li>
+</ul>

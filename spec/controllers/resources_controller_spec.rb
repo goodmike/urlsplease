@@ -20,7 +20,7 @@ describe ResourcesController do
     @resources = []
     mock_user.stub(:resources) { @resources }
     controller.stub(:current_user) { mock_user }
-    request.env['warden'] = mock_model(Warden, :authenticate => mock_user, :authenticate! => mock_user)
+    request.env['warden'] = mock(Warden, :authenticate => mock_user, :authenticate! => mock_user)
     mock_request.stub(:resources) { @resources }
     User.stub(:where).with(:nickname => "Uwe") { [mock_user] }
     Request.stub(:find).with("2") { mock_request }

@@ -8,7 +8,7 @@ describe RequestsController do
   
   before(:each) do
     @requests = []
-    request.env['warden'] = mock_model(Warden, :authenticate => mock_user, :authenticate! => mock_user)
+    request.env['warden'] = mock(Warden, :authenticate => mock_user, :authenticate! => mock_user)
     User.stub(:where).with(:nickname => "Uwe") { [mock_user] }
     controller.stub(:current_user) { mock_user }
     mock_user.stub(:requests) { @requests }

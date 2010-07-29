@@ -24,6 +24,7 @@ Urlsplease::Application.routes.draw do |map|
   get "welcome/index"
   get "welcome/purpose"
   get "welcome/todo"
+  get "welcome/releasenotes"
   
 
   # The priority is based upon order of creation:

@@ -6,7 +6,7 @@ describe UsersController do
   include MockModels
    
    before(:each) do
-     request.env['warden'] = mock_model(Warden, :authenticate => mock_user, :authenticate! => mock_user)
+     request.env['warden'] = mock(Warden, :authenticate => mock_user, :authenticate! => mock_user)
    end
    
   describe "GET show" do
