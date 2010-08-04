@@ -2,20 +2,20 @@
 source 'http://gemcutter.org'
 
 
-gem "rails", "3.0.0.beta4"
+gem "rails", "3.0.0.rc"
 gem "warden", "0.10.7"
 gem "bcrypt-ruby", "2.1.2", :require => "bcrypt" 
 gem "devise", "1.1.rc2"
 gem "pg"
 gem "recaptcha"
-
+gem "imposter", ">=0.2.0"
 
 group :test do
-    gem "rspec-rails", ">= 2.0.0.beta.15"
-    gem "rspec",       ">= 2.0.0.beta.15"
-    gem "rspec-core",  ">= 2.0.0.beta.15"
-    gem "rspec-expectations", ">= 2.0.0.beta.15"
-    gem "rspec-mocks", ">= 2.0.0.beta.15"
+    gem "rspec-rails", ">= 2.0.0.beta.19"
+    gem "rspec",       ">= 2.0.0.beta.19"
+    gem "rspec-core",  ">= 2.0.0.beta.19"
+    gem "rspec-expectations", ">= 2.0.0.beta.19"
+    gem "rspec-mocks", ">= 2.0.0.beta.19"
 end
 
 ## Bundle edge rails:

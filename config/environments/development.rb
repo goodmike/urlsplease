@@ -19,4 +19,7 @@ Urlsplease::Application.configure do
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
+    
+  # Rails 3 prerelease versions require declaration of deprecation notice handling
+  config.active_support.deprecation = :log
 end
