@@ -8,7 +8,7 @@ gem "bcrypt-ruby", "2.1.2", :require => "bcrypt"
 gem "devise", "1.1.rc2"
 gem "pg"
 gem "recaptcha"
-# gem "imposter", ">=0.2.0"
+gem "urlsplease-imposter", ">=0.2.0"
 
 group :test do
     gem "rspec-rails", ">= 2.0.0.beta.19"

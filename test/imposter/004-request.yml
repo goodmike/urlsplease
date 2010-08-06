@@ -1,0 +1,7 @@
+--- 
+request: 
+  fields: 
+    id: i.to_s
+    requirements: Faker::Lorem.sentence(3)
+    user_id: (rand(1000) + 1).to_s
+  quantity: 2000

@@ -1,0 +1,14 @@
+--- 
+user: 
+  fields: 
+    id: i.to_s
+    nickname: Imposter::Vegetable.multiple
+    email: Imposter.email_address()
+    encrypted_password: Imposter::Vegetable.multiple
+    password_salt: Imposter::Vegetable.multiple
+    reset_password_token: i.to_s
+    remember_token: i.to_s
+    sign_in_count: i.to_s
+    current_sign_in_ip: Imposter::Animal.one
+    last_sign_in_ip: Imposter::Animal.one
+  quantity: 1000

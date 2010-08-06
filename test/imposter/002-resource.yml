@@ -1,0 +1,8 @@
+--- 
+resource: 
+  fields: 
+    id: i.to_s
+    url: Imposter.urlify()
+    request_id: (rand(2000) + 1).to_s
+    user_id: (rand(1000) + 1).to_s
+  quantity: 5000

@@ -1,9 +1,0 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-one:
-  requirements: MyText
-  user_id: 1
-
-two:
-  requirements: MyText
-  user_id: 1

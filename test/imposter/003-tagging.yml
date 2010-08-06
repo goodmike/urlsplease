@@ -1,0 +1,9 @@
+--- 
+tagging: 
+  fields: 
+    id: i.to_s
+    user_id: (rand(1000) + 1).to_s
+    taggable_id: (rand(1000) + 1).to_s
+    taggable_type: "[\"User\", \"Request\"].rand"
+    tag_id: (rand(10000) + 1).to_s
+  quantity: 5000

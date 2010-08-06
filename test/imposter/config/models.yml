@@ -1,0 +1,43 @@
+--- 
+default_quantity: 1000
+choices: 
+  taggable_type: 
+  - User
+  - Request
+distribution: linear
+skip: 
+  - Taggable
+quantities: 
+  Request: 2000
+  Resource: 5000
+  Tag: 10000
+  Taggable: 1000
+  Tagging: 5000
+  
+# Example for blog with User, Post, Comment, Tag, and Feed, models:
+# Tag has a taggable_id and taggable_type for polymorphic association with
+#   User and Post. Therefore, taggable_type will be a random choice of 
+#   'User' or 'Post.
+# Distribution will be logarithmic: lower foreign key ids will be used 
+#   more frequently. (TODO)
+# Feed models will not be impostered. (TODO)
+# More than 100 Post Comment and Tag models will be impostered, and the
+#   foreign keys that refer to these models will span the range from 1
+#   to the upper limit.
+# Even though Taggable is not a model class, the generator will look for 
+#   a quantity when it encounters the taggable_id column.
+# 
+# ---
+# default_quantity: 100
+# choices: 
+#   taggable_type: 
+#   - User
+#   - Post
+# distribution: log
+# skip: 
+#   - Feed
+# quantities: 
+#   Post: 1000
+#   Comment: 2000
+#   Tag: 10000
+#   Taggable:100
