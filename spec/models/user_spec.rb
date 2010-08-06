@@ -86,6 +86,32 @@ describe User do
       @user.new_tags = "two, more"
       assert @user.save
     end
+    
+  end
+  
+  describe "subscribe method" do
+    
+    before(:each) do
+      @user = User.create(valid_attributes)
+    end
+    
+    it "calls user.tag with user and subscribe's arguments" do
+      @user = User.create(valid_attributes)
+      @user.should_receive(:tag).with(@user, "one, two")
+      @user.subscribe("one, two")
+    end
+    
+    it "creates new records for taggings" do
+      @user.subscribe("one, two")
+      @user.taggings.size.should ==(2)
+    end
+    
+    it "does not duplicate taggings" do
+      user = User.create!(valid_attributes("foo").with(:new_tags => "two, tags"))
+      user.subscribe("one, two")
+      user.taggings.size.should ==(3)
+    end
+    
   end
   
   it "returns tags from its taggings in response to :tags" do

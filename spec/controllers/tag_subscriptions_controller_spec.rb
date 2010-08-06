@@ -84,7 +84,7 @@ describe TagSubscriptionsController do
   describe "POST 'create'" do
     
     before(:each) do
-      mock_user.stub(:update_attribute)
+      mock_user.stub(:subscribe)
     end
     
     it "finds user by nickname" do
@@ -102,8 +102,8 @@ describe TagSubscriptionsController do
       lambda { post 'create', :new_tags => "one, two" }.should raise_error(ActionController::RoutingError)
     end
     
-    it "updates new_tags value of user to value of new_tags param" do
-      mock_user.should_receive(:update_attribute).with(:new_tags, "one, two")
+    it "updates sends new_tags param to user's subscribe method" do
+      mock_user.should_receive(:subscribe).with("one, two")
       post 'create', :user_id => "foo", :new_tags => "one, two"
     end
     

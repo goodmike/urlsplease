@@ -39,7 +39,7 @@ module Taggable
   
   def tag(author = false, tag_string = false)
     author   ||= self.user
-    new_tags = @new_tags || tag_string
+    new_tags = tag_string || @new_tags
     if new_tags
       Tag.split(new_tags).each do |contents|
         t = Tagging.new(:taggable => self, :user => author, :contents => contents)

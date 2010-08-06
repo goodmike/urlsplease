@@ -33,6 +33,11 @@ class User < ActiveRecord::Base
     self
   end
   
+  def subscribe(tag_string)
+    self.tag(self, tag_string)
+    self.taggings.each &:save
+  end
+  
   def tag_subscriptions
     Tag.joins(:taggings).
         where(:taggings => {:user_id => self, :taggable_id => self, 

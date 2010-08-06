@@ -13,7 +13,7 @@ class TagSubscriptionsController < ApplicationController
   end
 
   def create
-    @user.update_attribute(:new_tags, params[:new_tags])
+    @user.subscribe(params[:new_tags])
     redirect_to(user_tag_subscriptions_path(@user), :notice => "Tags added.")
   end
 
