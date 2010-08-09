@@ -1,5 +1,5 @@
 --- 
-default_quantity: 1000
+default_quantity: 10000
 choices: 
   taggable_type: 
   - User
@@ -7,12 +7,16 @@ choices:
 distribution: linear
 skip: 
   - Taggable
+unique:
+  - nickname
+  - contents
 quantities: 
-  Request: 2000
-  Resource: 5000
+  Request: 20000
+  Resource: 50000
   Tag: 10000
-  Taggable: 1000
-  Tagging: 5000
+  Taggable: 10000
+  Tagging: 100000
+  User: 10000
   
 # Example for blog with User, Post, Comment, Tag, and Feed, models:
 # Tag has a taggable_id and taggable_type for polymorphic association with
