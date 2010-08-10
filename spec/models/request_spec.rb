@@ -42,6 +42,37 @@ describe Request do
     r.should_not be_valid
   end
   
+  
+  describe "finding requests in order of response count" do
+    
+    before(:each) do
+      @requests = (1..5).collect do |i| 
+        r = new_request({}, i)
+        r.save!
+        r
+      end
+      [1,2,4,1,2,1].each do |i|
+        r = @requests[i].resources.build(:url => "http://someurl#{i}.com")
+        r.user = mock_user
+        r.save!
+      end
+    end
+    
+    it "returns all requests, regardless of response count" do
+      Request.by_response_count().size.should ==(@requests.size)
+    end
+    
+    it "reutrns request with most resources first" do
+      Request.by_response_count().first.should ==(@requests[1])
+    end
+    
+    it "reutrns requests with accurate response counts" do
+      Request.by_response_count()[0].response_count.should ==("3")
+      Request.by_response_count()[1].response_count.should ==("2")
+      Request.by_response_count()[2].response_count.should ==("1")
+      Request.by_response_count()[3].response_count.should ==("0")
+    end
+  end
 
 # Extractable to 'Taggable' behavior  
   

@@ -3,6 +3,6 @@ resource:
   fields: 
     id: i.to_s
     url: Imposter.urlify()
-    request_id: (rand(2000) + 1).to_s
-    user_id: (rand(1000) + 1).to_s
-  quantity: 5000
+    request_id: (rand(10000) + 1).to_s
+    user_id: (rand(100) + 1).to_s
+  quantity: 50000

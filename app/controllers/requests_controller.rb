@@ -13,7 +13,7 @@ class RequestsController < ApplicationController
     if @user
       @requests = @user.requests.sort {|a,b| b.resources.size <=> a.resources.size }
     else
-      @requests = Request.all.sort {|a,b| b.resources.size <=> a.resources.size }
+      @requests = Request.by_response_count
     end
     respond_to do |format|
       format.html # index.html.erb

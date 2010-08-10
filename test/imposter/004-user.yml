@@ -2,13 +2,13 @@
 user: 
   fields: 
     id: i.to_s
-    nickname: Imposter::Vegetable.multiple
+    nickname: "\"nickname\" + Imposter::Mineral.one + i.to_s"
     email: Imposter.email_address()
-    encrypted_password: Imposter::Vegetable.multiple
-    password_salt: Imposter::Vegetable.multiple
-    reset_password_token: i.to_s
-    remember_token: i.to_s
+    encrypted_password: Imposter::Vegetable.one
+    password_salt: Imposter::Mineral.multiple
+    reset_password_token: "\"reset_password_token\" + Imposter::Mineral.one + i.to_s"
+    remember_token: "\"remember_token\" + Imposter::Mineral.one + i.to_s"
     sign_in_count: i.to_s
-    current_sign_in_ip: Imposter::Animal.one
-    last_sign_in_ip: Imposter::Animal.one
-  quantity: 1000
+    current_sign_in_ip: Imposter::Vegetable.one
+    last_sign_in_ip: Imposter::Animal.multiple
+  quantity: 100

@@ -17,8 +17,8 @@ describe RequestsController do
   describe "GET index" do
     
     describe "when no authorizing user is presented" do
-      it "assigns all requests as @requests" do
-        Request.stub(:all) { [mock_request] }
+      it "returns requests ordered by response count" do
+        Request.stub(:by_response_count) { [mock_request] }
         get :index
         assigns(:requests).should eq([mock_request])
       end

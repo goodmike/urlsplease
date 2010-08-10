@@ -2,5 +2,5 @@
 tag: 
   fields: 
     id: i.to_s
-    contents: Imposter::Animal.one
-  quantity: 10000
+    contents: "\"contents\" + Imposter::Mineral.one + i.to_s"
+  quantity: 100

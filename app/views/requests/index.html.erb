@@ -7,7 +7,7 @@
 <% @requests.each do |request| %>
 <p><%= link_to request.excerpt, user_request_path(request.user, request) %>
     by <%= link_to user(request), request.user %><br />
-    <%= "#{request.resources.size} responses" if request.resources.size > 0 %> </p>
+    <%= "#{request.response_count} responses" if request.response_count.to_i > 0 %> </p>
 
 <% end %>
 

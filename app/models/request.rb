@@ -11,6 +11,17 @@ class Request < ActiveRecord::Base
   # user is not accessible to mass assign: must be set explicitly
   attr_accessible :requirements
   
+  def self.by_response_count
+    Request.find_by_sql("SELECT requests.id, requests.requirements, 
+      requests.user_id, requests.created_at, requests.updated_at, 
+      COALESCE(resources_external.count_id,0) AS response_count 
+      FROM requests LEFT OUTER JOIN (SELECT resources.request_id,
+      COUNT(resources.id) AS count_id FROM resources GROUP BY  resources.request_id)
+      resources_external ON requests.id = resources_external.request_id
+      ORDER BY response_count DESC
+      LIMIT 1000")
+  end
+  
   def excerpt(chars=100)
     return requirements unless requirements.length > chars
     pos = chars - 3
