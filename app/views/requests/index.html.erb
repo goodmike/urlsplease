@@ -5,8 +5,8 @@
 <table>
 
 <% @requests.each do |request| %>
-<p><%= link_to request.excerpt, user_request_path(request.user, request) %>
-    by <%= link_to user(request), request.user %><br />
+<p><%= link_to request.excerpt, user_request_path(request.username, request) %>
+    by <%= link_to request.username, user_path(request.username) %><br />
     <%= "#{request.response_count} responses" if request.response_count.to_i > 0 %> </p>
 
 <% end %>

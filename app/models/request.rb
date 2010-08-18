@@ -14,12 +14,14 @@ class Request < ActiveRecord::Base
   def self.by_response_count
     Request.find_by_sql("SELECT requests.id, requests.requirements, 
       requests.user_id, requests.created_at, requests.updated_at, 
+      users.nickname AS username,
       COALESCE(resources_external.count_id,0) AS response_count 
       FROM requests LEFT OUTER JOIN (SELECT resources.request_id,
-      COUNT(resources.id) AS count_id FROM resources GROUP BY  resources.request_id)
+      COUNT(resources.id) AS count_id FROM resources GROUP BY resources.request_id)
       resources_external ON requests.id = resources_external.request_id
+      LEFT OUTER JOIN users ON requests.user_id = users.id
       ORDER BY response_count DESC
-      LIMIT 1000")
+      LIMIT 100")
   end
   
   def excerpt(chars=100)
