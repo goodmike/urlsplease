@@ -42,6 +42,19 @@ describe Request do
     r.should_not be_valid
   end
   
+  it "returns latest records first from `recent` scope" do
+    r1 = Request.new(valid_attributes.with(:requirements => "one"))
+    r1.user = mock_model(User); r1.created_at = Time.now() - 2.minutes; r1.save
+    r2 = Request.new(valid_attributes.with(:requirements => "two"))
+    r2.user = mock_model(User); r2.created_at = Time.now() - 3.minutes; r2.save
+    r3 = Request.new(valid_attributes.with(:requirements => "three"))
+    r3.user = mock_model(User); r3.created_at = Time.now; r3.save
+    r4 = Request.new(valid_attributes.with(:requirements => "four"))
+    r4.user = mock_model(User); r4.created_at = Time.now() - 1.minutes; r4.save
+    
+    Request.recent.should ==([r3,r4,r1,r2])
+  end
+  
   
   describe "finding requests in order of response count" do
     

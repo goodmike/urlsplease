@@ -11,6 +11,8 @@ class Request < ActiveRecord::Base
   # user is not accessible to mass assign: must be set explicitly
   attr_accessible :requirements
   
+  scope :recent, order("requests.created_at DESC")
+  
   def self.by_response_count
     Request.find_by_sql("SELECT requests.id, requests.requirements, 
       requests.user_id, requests.created_at, requests.updated_at, 

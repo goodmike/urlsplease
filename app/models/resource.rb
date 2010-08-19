@@ -27,4 +27,6 @@ class Resource < ActiveRecord::Base
   validates :url,  :presence => true, :length => { :maximum => 256 }, :uri => true
   validates :request, :presence => true
   
+  scope :recent, order("resources.created_at DESC")
+
 end
