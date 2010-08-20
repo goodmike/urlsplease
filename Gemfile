@@ -5,7 +5,7 @@ source 'http://gemcutter.org'
 gem "rails", "3.0.0.rc"
 gem "warden", "0.10.7"
 gem "bcrypt-ruby", "2.1.2", :require => "bcrypt" 
-gem "devise", "1.1.rc2"
+gem "devise", ">=1.1.1"
 gem "pg"
 gem "recaptcha"
 gem "urlsplease-imposter", ">=0.2.0"
